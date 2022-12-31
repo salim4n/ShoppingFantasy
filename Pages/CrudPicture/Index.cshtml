@@ -1,5 +1,5 @@
 ﻿@page
-@model ShoppingFantasy.Pages.CrudCategory.IndexModel
+@model ShoppingFantasy.Pages.CrudPicture.IndexModel
 
 @{
     ViewData["Title"] = "Index";
@@ -14,28 +14,29 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Category[0].Name)
+                @Html.DisplayNameFor(model => model.Picture[0].FileName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category[0].ImageUrl)
+                @Html.DisplayNameFor(model => model.Picture[0].PictureUrl)
             </th>
             <th>
-                photo
+                @Html.DisplayNameFor(model => model.Picture[0].Product)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Model.Category) {
+@foreach (var item in Model.Picture) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.FileName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ImageUrl)
+                @*@Html.DisplayFor(modelItem => item.PictureUrl)*@
+                <img src="@item.PictureUrl" alt="@item.FileName" width="50px" />
             </td>
             <td>
-                <img src="@item.ImageUrl" alt="@item.Name" />
+                @Html.DisplayFor(modelItem => item.Product.Name)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
@@ -43,6 +44,6 @@
                 <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
-    }
+}
     </tbody>
 </table>

@@ -1,0 +1,49 @@
+﻿@page
+@model ShoppingFantasy.Pages.ProductByCategoryModel
+@{
+    ViewData["Title"] = $"{Model.Category.Name}";
+}
+
+<div class="row text-center">
+
+    <h1 class="  pt-4 pb-4">@Model.Category.Name</h1>
+</div>
+
+<div class="row text-center">
+    @foreach(var item in Model.Category.Products)
+    {
+    <div class="list-group col-12 pb-3">
+
+        <div class="list-group-item list-group-item-action flex-column align-items-start active " id="product-item">
+            <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1 ">@item.Name</h5>
+                   @* <div class="container justify-content-between">
+                        @foreach(var picture in item.Picture)
+                        {
+                            <img src="@picture.PictureUrl" alt="@item.Name" />
+                        }
+                    </div>*@
+                    @if (item.IsInPromo)
+                    {
+                        <small class="text-warning"><strong><strike>@item.Price.ToString("c")</strike></strong></small>
+                        <small class="text-success"><strong>@item.PromoPrice.ToString("c")</strong></small>
+                        
+                    }
+                    else
+                    {
+                        <small class="text-success"><strong>@item.Price.ToString("c")</strong></small>
+                    }
+                </div>
+                <p class="mb-1"><em>@item.Description</em></p>
+            <button class="btn btn-outline-info btn-sm">Ajouter au panier</button>
+        </div>
+    </div>
+    }
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.carousel').carousel();
+    });
+    </script>

@@ -20,7 +20,7 @@ namespace ShoppingFantasy.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal PromoPrice { get; set; }
 
-        [DisplayName("Ajouter une promotion ?")]
+        [DisplayName(" Promotion ?")]
         public bool IsInPromo { get; set; } = false;
         public string Description { get; set; }
         public int CategoryId { get; set; }

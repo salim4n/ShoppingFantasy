@@ -10,6 +10,9 @@ namespace ShoppingFantasy.Models
 
         [DisplayName("Nom de l'image")]
         public string FileName { get; set; }
+
+        [DisplayName("lien de l'image")]
+        public string PictureUrl { get; set; }
         public int ProductId { get; set; }
 
         [ForeignKey("ProductId")]
