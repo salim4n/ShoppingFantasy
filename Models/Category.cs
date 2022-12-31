@@ -10,7 +10,7 @@ namespace ShoppingFantasy.Models
         [DisplayName("Nom")]
         public string Name { get; set; }
 
-        [DisplayName("Photo representant la categorie d'article")]
+        [DisplayName("lien de l'image")]
         public string ImageUrl { get; set; }
 
         [ValidateNever]
