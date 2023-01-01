@@ -54,11 +54,11 @@
         @foreach(var item in Model.Product.Picture)
         {
             <div class="col col-lg-2 col-md-4 col-sm-6">
-                <div class="card bg-light">
                     <a  target="_blank" href="@item.PictureUrl">
                     <img class="card-img-top" src="@item.PictureUrl" alt="@item.FileName">
                     <div class="card-body">
                         <p class="card-text">@item.PictureUrl</p>
+                        
                     </div>
                     </a>
                 </div>
