@@ -4,83 +4,89 @@
     ViewData["Title"] = $"{Model.Category.Name}";
 }
 
-
 <ul class="list-unstyled">
-    @foreach(var product in Model.Category.Products)
-    {
-        <li class=" row oi-media-pause my-3 container bg-primary rounded">
-            <div class="media-img-wrapper mr-2 pt-2 px-2">
-                @foreach(var picture in product.Picture)
-                {
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal-@product.Id-@picture.Id">
-                        <img class="media-img rounded" src="@picture.PictureUrl" alt="@product.Name" />
-                    </button>
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="productModal-@product.Id-@picture.Id" tabindex="-1" aria-labelledby="productModalLabel-@product.Id-@picture.Id" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content text-center">
-                                <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="productModalLabel-@product.Id-@picture.Id">@product.Name</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <img src="@picture.PictureUrl" alt="@product.Name" class="img-fluid rounded shadow-lg" />
-                                </div>
+    @foreach (var product in Model.Category.Products)
+    {
+
+        <li class="container bg-secondary oi-media-pause my-3 rounded">
+            <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#productModal-@product.Id">
+            <div class="media-img-wrapper mr-2 pt-2 px-2">
+                <img class="media-img rounded" src="@product.Picture.FirstOrDefault().PictureUrl" alt="@product.Name" />
+            </div>
+            </button>
+            <div class="media-body">
+                    <h4 class="mb-0">@product.Name</h4>
+                <p>@product.Description</p>
+                <div class="flex-row px-4 pb-3">
+                    @if (product.IsInPromo)
+                    {
+                        <h5 class="price"><strike class="text-danger">@product.Price.ToString("c")</strike></h5>
+                        <h5 class="price"><strong class="text-success">@product.PromoPrice.ToString("c")</strong></h5>
+                    }
+                    else
+                    {
+                        <h5 class="price"><strong class="text-success">@product.Price.ToString("c")</strong></h5>
+                    }
+                    <button class="btn btn-info btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
+                </div>
+            </div>
+        </li>
+
+        <!-- Modal -->
+        <div class="modal fade" id="productModal-@product.Id" tabindex="-1" aria-labelledby="productModalLabel-@product.Id" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content text-center">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5 text-center" id="productModalLabel-@product.Id">@product.Name</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="productCarousel-@product.Id" class="carousel slide" data-bs-ride="carousel">
+                            <!-- Indicateurs -->
+                            <ol class="carousel-indicators">
+                                @foreach (var picture in product.Picture)
+                                {
+                                    <li data-bs-target="#productCarousel-@product.Id" data-bs-slide-to="@product.Picture.ToList().FindIndex(p => p == picture)" class="@(product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")"></li>
+                                }
+                            </ol>
+                            <!-- Diapositives -->
+                            <div class="carousel-inner">
+                                @foreach (var picture in product.Picture)
+                                {
+                                    <div class="carousel-item @(product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")">
+                                        <img src="@picture.PictureUrl" alt="@product.Name" class="img-fluid rounded shadow-lg" />
+                                    </div>
+                                }
                             </div>
+                            <!-- Contrôles -->
+                            <a class="carousel-control-prev" href="#productCarousel-@product.Id" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Précédent</span>
+                            </a>
+                            <a class="carousel-control-next" href="#productCarousel-@product.Id" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Suivant</span>
+                            </a>
                         </div>
                     </div>
-                }
-            </div>
-            <div class="media-body pb-2">
-                <h4 class="mb-0 pb-3 pt-3">@product.Name</h4>
-                <div class="container bg-secondary rounded">
-                <p><em>@product.Description</em></p>
                 </div>
-                    <div class="flex-row px-4">
-                @if (product.IsInPromo)
-                {
-                    <h5 class="price"><strike class="text-warning">@product.Price.ToString("c")</strike></h5>
-                    <h5 class="price"><strong class="text-info">@product.PromoPrice.ToString("c")</strong></h5>
-                }
-                else
-                {
-                    <h5 class="price"><strong class="text-info">@product.Price.ToString("c")</strong></h5>
-                }
-                    <button class="btn btn-info btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
-                    </div>
-                </div>
-           
-         </li>
-         
-    }
-</ul>
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                ...
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
-    </div>
-</div>
 
+
+        <script>
+            $(document).ready(function () {
+                $('#productModal-@product.Id').on('shown.bs.modal', function () {
+                    $('#productCarousel-@product.Id').carousel();
+                }).on('hidden.bs.modal', function () {
+                    $('#productCarousel-@product.Id').carousel('pause');
+                });
+            });
+        </script>
+
+    }
+</ul>
 
 <style>
     .modal-content {
@@ -90,13 +96,4 @@
         color: #333;
     }
 </style>
-
-
-
-
-
-
-
-
-
 

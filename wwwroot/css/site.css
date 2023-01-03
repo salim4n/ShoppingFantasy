@@ -22,9 +22,3 @@ body {
  /* background-color:lightgray;*/
 }
 
-.modal-content {
-    background-color: #f2f2f2;
-    border-color: #333;
-    box-shadow: 0 3px 9px rgba(0,0,0,0.5);
-    color: #333;
-}
