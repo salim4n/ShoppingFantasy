@@ -12,16 +12,22 @@
             <div class="media-img-wrapper mr-2 pt-2 px-2">
                 @foreach(var picture in product.Picture)
                 {
-                     <button type="button" class="btn" data-toggle="modal" data-target="#productModal-@picture.Id" >
-                   <img class="media-img rounded" src="@picture.PictureUrl" alt="@product.Name" />
-                   </button>
-                    <!-- Large modal -->
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#productModal-@product.Id-@picture.Id">
+                        <img class="media-img rounded" src="@picture.PictureUrl" alt="@product.Name" />
+                    </button>
 
-
-                    <div class="modal fade productModal" tabindex="-1" role="dialog" aria-labelledby="productModal" aria-hidden="true" id="productModal">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                ...
+                    <!-- Modal -->
+                    <div class="modal fade" id="productModal-@product.Id-@picture.Id" tabindex="-1" aria-labelledby="productModalLabel-@product.Id-@picture.Id" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content text-center">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="productModalLabel-@product.Id-@picture.Id">@product.Name</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="@picture.PictureUrl" alt="@product.Name" class="img-fluid rounded shadow-lg" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -51,33 +57,39 @@
     }
 </ul>
 
-
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
     Launch demo modal
 </button>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 ...
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
 </div>
 
+
+<style>
+    .modal-content {
+        background-color: whitesmoke;
+        border-color: #333;
+        box-shadow: 0 3px 9px rgba(0,0,0,0.5);
+        color: #333;
+    }
+</style>
 
 
 
