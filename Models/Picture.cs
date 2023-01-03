@@ -18,5 +18,8 @@ namespace ShoppingFantasy.Models
         [ForeignKey("ProductId")]
         [ValidateNever]
         public Product Product { get; set; }
+
+        [NotMapped]
+        public bool IsActive { get; set; }
     }
 }
