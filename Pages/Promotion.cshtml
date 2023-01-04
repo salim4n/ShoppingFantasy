@@ -1,22 +1,28 @@
 ﻿@page
-@model ShoppingFantasy.Pages.ProductByCategoryModel
+@model ShoppingFantasy.Pages.PromotionModel
 @{
-    ViewData["Title"] = $"{Model.Category.Name}";
+    ViewData["Title"] = "Article(s) en promotion";
 }
+
+
+<div class="row text-center pt-4">
+    <h1 class="text-info">Nos Promotions</h1>
+</div>
+
 
 <ul class="list-unstyled">
 
-    @foreach (var product in Model.Category.Products)
+    @foreach (var product in Model.Products)
     {
 
-        <li class="container bg-secondary oi-media-pause my-3 rounded">
+        <li class="container bg-info oi-media-pause my-3 rounded hoverable">
             <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#productModal-@product.Id">
-            <div class="media-img-wrapper mr-2 pt-2 px-2">
-                <img class="media-img rounded" src="@product.Picture.FirstOrDefault().PictureUrl" alt="@product.Name" />
-            </div>
+                <div class="media-img-wrapper mr-2 pt-2 px-2">
+                    <img class="media-img rounded" src="@product.Picture.FirstOrDefault().PictureUrl" alt="@product.Name" />
+                </div>
             </button>
             <div class="media-body">
-                    <h4 class="mb-0">@product.Name</h4>
+                <h4 class="mb-0">@product.Name</h4>
                 <p>@product.Description</p>
                 <div class="flex-row px-4 pb-3">
                     @if (product.IsInPromo)
@@ -28,7 +34,7 @@
                     {
                         <h5 class="price"><strong class="text-success">@product.Price.ToString("c")</strong></h5>
                     }
-                    <button class="btn btn-info btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
+                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
                 </div>
             </div>
         </li>
@@ -96,16 +102,6 @@
         color: #333;
     }
 
-
-container{
-    position:relative;
-}
-
-
-container:hover {
-    z-index:5;
-}
-
     img {
         max-width: 200px;
         max-height: 200px;
@@ -116,6 +112,16 @@ container:hover {
 
         img:hover {
             transform: scale(1.1) rotate(5deg);
+        }
+
+        .hoverable{
+            position: relative;
+        }
+
+        .hoverable:hover{
+            z-index:5;
+            border: 2px solid black;
+            transform: scale(1.1) rotate(-1.2deg);
         }
 </style>
 

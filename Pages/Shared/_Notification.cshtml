@@ -1,0 +1,22 @@
+﻿@if (TempData.ContainsKey("Cle"))
+{
+
+    <div id="alert-message" class="alert alert-info pt-3 rounded text-center" role="alert">
+        <h4>@TempData["Cle"]</h4>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            document.getElementById("alert-message").style.display = "none";
+        }, 3000);
+    </script>
+
+
+
+}
+
+@if (TempData["error"] != null)
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+}
