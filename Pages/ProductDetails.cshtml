@@ -67,6 +67,9 @@
         <div class="pt-3">
             <p>@Model.Product.Description</p>
         </div>
+        <div class="col-12 pb-3">
+            <button class="btn btn-success btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
+        </div>
     </div>
 </div>
 
@@ -92,7 +95,7 @@
         .p-badge{
         z-index: 5;
         border: 2px solid black;
-        box-shadow: 10px 5px 5px black;
+        box-shadow: 10px 5px 5px navy;
         /*transform: scale(1.1) rotate(5deg);*/
         }
 
@@ -106,6 +109,11 @@
         z-index: 10;
         border: 2px solid black;
         box-shadow: 10px 5px 5px black;
+        }
+
+        button:hover{
+        z-index: -10;
+        box-shadow: 10px 5px 5px darkgray;
         }
 
 
