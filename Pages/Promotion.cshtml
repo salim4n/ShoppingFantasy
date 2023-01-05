@@ -34,7 +34,10 @@
                     {
                         <h5 class="price"><strong class="text-success">@product.Price.ToString("c")</strong></h5>
                     }
-                    <button class="btn btn-outline-primary btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
+                    <button class="btn btn-outline-success btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
+                    <a asp-route-id="@product.Id" asp-page="/ProductDetails">
+                        <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-eye-fill"></i> Details</button>
+                    </a>
                 </div>
             </div>
         </li>
@@ -112,6 +115,8 @@
 
         img:hover {
             transform: scale(1.1) rotate(5deg);
+            border: 2px solid black;
+            box-shadow: 10px 5px 5px black;
         }
 
         .hoverable{
@@ -119,9 +124,10 @@
         }
 
         .hoverable:hover{
-            z-index:5;
+            z-index:10;
             border: 2px solid black;
-            transform: scale(1.1) rotate(-1.2deg);
+            box-shadow: 10px 5px 5px black;
+            @*transform: scale(1.1) rotate(-1.2deg);*@
         }
 </style>
 

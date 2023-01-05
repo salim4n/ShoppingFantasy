@@ -6,7 +6,7 @@
 
 <div class="row text-center">
 
-    <h1 class="pt-2 pb-4">Nos Categories d'articles</h1>
+    <h1 class="pt-2 pb-4 title">Nos Categories d'articles</h1>
 </div>
 
 <div class="row text-center">
@@ -15,7 +15,7 @@
     {
         <div class="col col-lg-2 col-md-4 col-sm-6">
 
-            <div class="card text-white bg-primary mb-3" style="max-width: 20rem;">
+            <div class="card text-white bg-primary mb-3 hoverable" style="max-width: 20rem;">
                 <div class="card-header">
                     <h4 class="card-title">@item.Name</h4>
                 </div>
@@ -28,5 +28,43 @@
         </div>
     }
 
-
 </div>
+
+<style>
+    .modal-content {
+        background-color: whitesmoke;
+        border-color: #333;
+        box-shadow: 0 3px 9px rgba(0,0,0,0.5);
+        color: #333;
+    }
+
+    img {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 6px;
+        transition: transform .2s;
+        margin-bottom: 10px;
+    }
+
+        img:hover {
+            transform: scale(1.1) rotate(5deg);
+            border: 2px solid black;
+            box-shadow: 10px 5px 5px black;
+        }
+
+    .hoverable {
+        position: relative;
+    }
+
+        .hoverable:hover {
+            z-index: 10;
+            border: 2px solid black;
+            box-shadow: 10px 5px 5px black;
+            transform: scale(1.1) rotate(-1.2deg);
+        }
+
+        .title {
+            z-index:10;
+        }
+
+</style>
