@@ -5,4 +5,110 @@
 }
 
 
-<h1>Cette page s'affiche bien</h1>
+<h1 class="text-center text-info title-product">@Model.Product.Name</h1>
+
+<div class="row">
+
+        <div class="carousel-wrapper">
+           
+            <div class="carousel-wrapper">
+                <div class="media">
+                    <div class="row media-img-wrapper d-flex justify-content-center">
+                        <div id="productCarousel-@Model.Product.Id" class="carousel slide w-50 carousel-black" data-bs-ride="carousel">
+                            <!-- Indicateurs -->
+                            <ol class="carousel-indicators">
+                                @foreach (var picture in Model.Product.Picture)
+                                {
+                                    <li data-bs-target="#productCarousel-@Model.Product.Id" data-bs-slide-to="@Model.Product.Picture.ToList().FindIndex(p => p == picture)" class="@(Model.Product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")"></li>
+                                }
+                            </ol>
+                            <!-- Diapositives -->
+                            <div class="carousel-inner">
+                                @foreach (var picture in Model.Product.Picture)
+                                {
+                                    <div class="carousel-item @(Model.Product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")">
+                                        <img src="@picture.PictureUrl" alt="@Model.Product.Name" class="rounded shadow-lg mx-auto d-block w-100" style="height:500px;" />
+                                    </div>
+                                }
+                            </div>
+                            <!-- Contrôles -->
+                            <a class="carousel-control-prev text-info" href="#productCarousel-@Model.Product.Id" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Précédent</span>
+                            </a>
+                            <a class="carousel-control-next text-info" href="#productCarousel-@Model.Product.Id" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Suivant</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+</div>
+<div class="row mt-4">
+    <div class="col-sm-12 container bg-primary rounded product-info">
+        @if (Model.Product.IsInPromo)
+        {
+            <span class="badge bg-info p-badge">En Promotion !</span>
+            <h5 class="price pt-3"><strike class="text-warning">@Model.Product.Price.ToString("c")</strike></h5>
+            <h5 class="price"><strong class="text-success">@Model.Product.PromoPrice.ToString("c")</strong></h5>
+        }
+        else
+        {
+            <h5 class="price pt-3"><strong class="text-success">@Model.Product.Price.ToString("c")</strong></h5>
+        }
+        <!-- Les informations du produit vont ici -->
+        <div class="pt-3">
+            <h4 class="text-center">@Model.Product.Name</h4>
+        </div>
+        <div class="pt-3">
+            <p>@Model.Product.Description</p>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        $('#productModal-@Model.Product.Id').on('shown.bs.modal', function () {
+            $('#productCarousel-@Model.Product.Id').carousel();
+        }).on('hidden.bs.modal', function () {
+            $('#productCarousel-@Model.Product.Id').carousel('pause');
+        });
+    });
+</script>
+
+     <style>
+        
+        .title-product{
+            padding-top:10px;
+            padding-bottom:10px;
+            z-index:10;
+        }
+
+        .p-badge{
+        z-index: 5;
+        border: 2px solid black;
+        box-shadow: 10px 5px 5px black;
+        /*transform: scale(1.1) rotate(5deg);*/
+        }
+
+        .product-info:hover{
+        z-index: 10;
+        border: 2px solid black;
+        box-shadow: 10px 5px 5px black;
+        }
+
+        img:hover{
+        z-index: 10;
+        border: 2px solid black;
+        box-shadow: 10px 5px 5px black;
+        }
+
+
+    .carousel-wrapper {
+    }
+     </style>
