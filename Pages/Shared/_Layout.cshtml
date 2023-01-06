@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using ShoppingFantasy.Pages.Shared
+
+
+
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -34,8 +40,8 @@
                             </a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Panneau d'Administration</a>
-                            <div class="dropdown-menu">
+                            <a class="nav-link dropdown-toggle " data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Panneau d'Administration</a>
+                            <div class="dropdown-menu bg-light ">
                                 <a class="dropdown-item" asp-page="/crudcategory/index">Categorie d'Articles</a>
                                 <a class="dropdown-item" asp-page="/crudproduct/index">Articles</a>
                                 <a class="dropdown-item" asp-page="/crudpicture/index">Image des Articles</a>
