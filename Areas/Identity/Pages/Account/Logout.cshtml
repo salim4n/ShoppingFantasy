@@ -1,11 +1,11 @@
 ﻿@page
 @model LogoutModel
 @{
-    ViewData["Title"] = "Log out";
+    ViewData["Title"] = "Deconnexion";
 }
 
 <header>
-    <h1>@ViewData["Title"]</h1>
+    @*<h1>@ViewData["Title"]</h1>*@
     @{
         if (User.Identity.IsAuthenticated)
         {
@@ -15,7 +15,12 @@
         }
         else
         {
-            <p>Vous etes deconnecter</p>
+            <hr />
+            <div class=" row text-center ">
+            <h2>Merci de votre visite .</h2>
+            <h3>A bientot !</h3>
+            </div>
+            <hr />
         }
     }
 </header>
