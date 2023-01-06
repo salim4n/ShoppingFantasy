@@ -75,16 +75,16 @@
 
 
 <script>
-    $(document).ready(function () {
-        $('#productModal-@Model.Product.Id').on('shown.bs.modal', function () {
+    //$(document).ready(function () {
+    //    $('#productModal-@Model.Product.Id').on('shown.bs.modal', function () {
             $('#productCarousel-@Model.Product.Id').carousel();
         }).on('hidden.bs.modal', function () {
             $('#productCarousel-@Model.Product.Id').carousel('pause');
         });
-    });
+    //});
 </script>
 
-     <style>
+  <style>
         
         .title-product{
             padding-top:10px;
@@ -119,4 +119,4 @@
 
     .carousel-wrapper {
     }
-     </style>
+  </style>
