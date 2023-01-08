@@ -27,12 +27,15 @@ namespace ShoppingFantasy.Models
 
         [ForeignKey("CategoryId")]
         [ValidateNever]
+        [DisplayName("Categorie")]
         public Category Category { get; set; }
 
         [ValidateNever]
+        [DisplayName("Images")]
         public ICollection<Picture> Picture { get; set; }
 
-        [ValidateNever]
-        public ICollection<CartItemProduct> CartItems { get; set; }
+        //[ValidateNever]
+        //[DisplayName("Panier")]
+        //public ICollection<CartItemProduct> CartItems { get; set; }
     }
 }

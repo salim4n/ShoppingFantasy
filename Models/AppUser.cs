@@ -28,8 +28,9 @@ namespace ShoppingFantasy.Models
         [DisplayName("Code Postal")]
         public string? PostalCode { get; set; }
 
-        [ValidateNever]
-        public ICollection<CartItem>? CartItems { get; set; }
+        //[ValidateNever]
+        //[DisplayName("Panier")]
+        //public ICollection<CartItem>? CartItems { get; set; }
 
     }
 }

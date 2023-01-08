@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
+using System.Security.Claims;
 
 namespace ShoppingFantasy.Pages
 {
@@ -15,22 +18,46 @@ namespace ShoppingFantasy.Pages
             _db = db;
         }
 
-        public Product Product { get; set; } = default!;
+        public ShoppingCart ShoppingCart { get; set; } = default!;
 
-        public async Task<IActionResult> OnGetAsync(int? id)
+        public async Task<IActionResult> OnGetAsync(int id)
         {
-            var product = await _db.Products.Include(p => p.Picture)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if(product == null)
+            ShoppingCart cartObj = new()
             {
-                return NotFound();
+                Count = 1,
+                ProductId = id,
+                Product = await _db.Products
+                            .Include(p => p.Category)
+                            .Include(p => p.Picture)
+                            .FirstOrDefaultAsync(p => p.Id == id)
+            }; 
+               
+            ShoppingCart = cartObj;
+
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(ShoppingCart sp)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            sp.ApplicationUserId = claim.Value;
+
+            ShoppingCart cartFromDb = await _db.ShoppingCarts.FirstOrDefaultAsync(s => s.ApplicationUserId == claim.Value && s.ProductId == sp.ProductId);
+
+            if (cartFromDb == null)
+            {
+                await _db.ShoppingCarts.AddAsync(sp);
+                //await _db.SaveChangesAsync();
             }
             else
             {
-                Product = product;
+                cartFromDb.Count += sp.Count;
             }
-            return Page();
+      
+                await _db.SaveChangesAsync();
+                return RedirectToPage("/Index");
+
         }
     }
 }

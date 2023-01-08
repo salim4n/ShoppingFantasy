@@ -9,15 +9,17 @@ namespace ShoppingFantasy.Models
         public int Id { get; set; }
 
         [ValidateNever]
+        [DisplayName("Articles")]
         public ICollection<CartItemProduct>? Products { get; set; }
 
-        [DisplayName("Quantite")]
-        public int Quantity { get; set; }
+        //[DisplayName("Quantite")]
+        //public int? Quantity { get; set; } = Products == null ? 0 : Products.Count;
 
         public string AppUserId { get; set; }
 
         [ForeignKey("AppUserId")]
         [ValidateNever]
+        [DisplayName("Utilisateur")]
         public AppUser AppUser { get; set; }
     }
 }

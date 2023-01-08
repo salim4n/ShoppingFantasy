@@ -1,4 +1,7 @@
-﻿namespace ShoppingFantasy.Utility
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
+namespace ShoppingFantasy.Utility
 {
     public static class SD
     {
@@ -26,5 +29,10 @@
 
         //session stripe
         public const string SessionCart = "SessionShoppingCart";
+
+
+        //livraison gratuite
+        public const decimal ShippingFreeCost = 25;
+        public const decimal ShippingCost = 5;
     }
 }
