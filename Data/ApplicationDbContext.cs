@@ -28,7 +28,6 @@ namespace ShoppingFantasy.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new ShoppingCartConfiguration());
-
             modelBuilder.Entity<IdentityUserLogin<string>>().HasKey(x => new { x.LoginProvider, x.ProviderKey });
 
             modelBuilder.Entity<Product>()

@@ -38,6 +38,12 @@ namespace ShoppingFantasy.Models
         {
             builder.Property(s => s.Id)
                    .ValueGeneratedOnAdd();
+
+            builder.HasOne(s => s.Product)
+                           .WithMany(p => p.ShoppingCarts)
+                           .HasForeignKey(s => s.ProductId);
         }
     }
+
+
 }

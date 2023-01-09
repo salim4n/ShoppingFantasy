@@ -246,7 +246,7 @@ namespace ShoppingFantasy.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("ShoppingFantasy.Models.OrderDetails", b =>
@@ -275,7 +275,7 @@ namespace ShoppingFantasy.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("ShoppingFantasy.Models.OrderHeader", b =>
@@ -355,7 +355,7 @@ namespace ShoppingFantasy.Data.Migrations
 
                     b.HasIndex("AppUserId");
 
-                    b.ToTable("OrderHeaders");
+                    b.ToTable("OrderHeaders", (string)null);
                 });
 
             modelBuilder.Entity("ShoppingFantasy.Models.Picture", b =>
@@ -381,7 +381,7 @@ namespace ShoppingFantasy.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Pictures");
+                    b.ToTable("Pictures", (string)null);
                 });
 
             modelBuilder.Entity("ShoppingFantasy.Models.Product", b =>
@@ -416,7 +416,7 @@ namespace ShoppingFantasy.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("ShoppingFantasy.Models.ShoppingCart", b =>
@@ -443,7 +443,7 @@ namespace ShoppingFantasy.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ShoppingCarts");
+                    b.ToTable("ShoppingCarts", (string)null);
                 });
 
             modelBuilder.Entity("ShoppingFantasy.Models.AppUser", b =>

@@ -34,6 +34,11 @@ namespace ShoppingFantasy.Models
         [DisplayName("Images")]
         public ICollection<Picture> Picture { get; set; }
 
+        [ValidateNever]
+        [DisplayName("Paniers")]
+        public ICollection<ShoppingCart> ShoppingCarts { get; set; }
+
+
         //[ValidateNever]
         //[DisplayName("Panier")]
         //public ICollection<CartItemProduct> CartItems { get; set; }

@@ -10,13 +10,19 @@
             document.getElementById("alert-message").style.display = "none";
         }, 3000);
     </script>
-
-
-
 }
 
-@if (TempData["error"] != null)
-{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
+@if (TempData.ContainsKey("success"))
+{
+
+    <div id="alert-message" class="alert alert-success pt-3 rounded text-center" role="alert">
+        <h4>@TempData["success"]</h4>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            document.getElementById("alert-message").style.display = "none";
+        }, 3000);
+    </script>
 }

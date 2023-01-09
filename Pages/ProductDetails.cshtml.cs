@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis;
@@ -18,6 +17,7 @@ namespace ShoppingFantasy.Pages
             _db = db;
         }
 
+        [BindProperty]
         public ShoppingCart ShoppingCart { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int id)
@@ -30,33 +30,45 @@ namespace ShoppingFantasy.Pages
                             .Include(p => p.Category)
                             .Include(p => p.Picture)
                             .FirstOrDefaultAsync(p => p.Id == id)
-            }; 
-               
+            };
+
             ShoppingCart = cartObj;
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync(ShoppingCart sp)
+        public async Task<IActionResult> OnPostAsync()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            sp.ApplicationUserId = claim.Value;
+            ShoppingCart.ApplicationUserId = claim.Value;
 
-            ShoppingCart cartFromDb = await _db.ShoppingCarts.FirstOrDefaultAsync(s => s.ApplicationUserId == claim.Value && s.ProductId == sp.ProductId);
+            ShoppingCart cartFromDb = await _db.ShoppingCarts
+                .FirstOrDefaultAsync(s => s.ApplicationUserId == claim.Value && s.ProductId == ShoppingCart.ProductId);
 
             if (cartFromDb == null)
             {
-                await _db.ShoppingCarts.AddAsync(sp);
-                //await _db.SaveChangesAsync();
+                var shoppingCart = new ShoppingCart
+                {
+                    ProductId = ShoppingCart.ProductId,
+                    Count = ShoppingCart.Count,
+                    ApplicationUserId = ShoppingCart.ApplicationUserId
+                };
+
+                await _db.ShoppingCarts.AddAsync(shoppingCart);
+
             }
             else
             {
-                cartFromDb.Count += sp.Count;
+                cartFromDb.Count += ShoppingCart.Count;
+                //_db.ShoppingCarts.Update(cartFromDb);
+                
             }
-      
-                await _db.SaveChangesAsync();
-                return RedirectToPage("/Index");
+
+
+            await _db.SaveChangesAsync();
+            TempData["success"] = $"{ShoppingCart.Count} article(s) ajoute(s) a votre panier .";
+            return RedirectToPage("/Index");
 
         }
     }
