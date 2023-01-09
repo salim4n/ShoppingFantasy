@@ -22,6 +22,14 @@ namespace ShoppingFantasy.Models
         [DisplayName("Date d'envoie")]
         public DateTime ShippingDate { get; set; }
 
+        [DisplayName("Livraison Gratuite")]
+        public bool FreeShipping { get; set; } = false;
+
+        [DisplayName("Prix de la Livraison")]
+        public double ShippingPrice { get; set; } = 6;
+
+        public int MyProperty { get; set; }
+
         [DisplayName("Total de l'ordre")]
         public double OrderTotal { get; set; }
 
