@@ -1,4 +1,7 @@
 ﻿@page
+@using Microsoft.AspNetCore.Authorization;
+@attribute [Authorize]
+
 @model ShoppingFantasy.Pages.MonPanier.IndexModel
 @{
     ViewData["Title"] = "Mon Panier";

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 
 namespace ShoppingFantasy.Pages.MonPanier
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _db;
@@ -25,52 +27,48 @@ namespace ShoppingFantasy.Pages.MonPanier
 
         public async Task<IActionResult> OnGet()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-            ShoppingCartVM cartVM = new()
+            if (User.Identity.IsAuthenticated)
             {
-                ListCart = await _db.ShoppingCarts
-                    .Include(sc => sc.Product)
-                    .ThenInclude(p => p.Picture)
-                    .Where(sc => sc.ApplicationUserId == claim.Value)
-                    .ToListAsync(),
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-                OrderHeader = new()
-            };
+                ShoppingCartVM cartVM = new()
+                {
+                    ListCart = await _db.ShoppingCarts
+                        .Include(sc => sc.Product)
+                        .ThenInclude(p => p.Picture)
+                        .Where(sc => sc.ApplicationUserId == claim.Value)
+                        .ToListAsync(),
 
-            foreach (var cart in cartVM.ListCart)
-            {
-                cart.Price = GetTotalPrice(cart);
-                cartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
-            }
+                    OrderHeader = new()
+                };
 
-            if (cartVM.OrderHeader.OrderTotal > (double)SD.ShippingFreeCost)
-            {
-                cartVM.OrderHeader.FreeShipping = true;
+                foreach (var cart in cartVM.ListCart)
+                {
+                    cart.Price = GetTotalPrice(cart);
+                    cartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+                }
+
+                if (cartVM.OrderHeader.OrderTotal > (double)SD.ShippingFreeCost)
+                {
+                    cartVM.OrderHeader.FreeShipping = true;
+                }
+                else
+                {
+                    cartVM.OrderHeader.FreeShipping = false;
+                    cartVM.OrderHeader.OrderTotal += (double)SD.ShippingCost;
+                }
+
+                ShoppingCart = cartVM;
+
+                return Page();
             }
             else
             {
-                cartVM.OrderHeader.FreeShipping = false;
-                cartVM.OrderHeader.OrderTotal += (double)SD.ShippingCost;
+                return RedirectToAction("Login", "Account");
             }
-
-			ShoppingCart = cartVM;
-
-            return Page();
+            
         }
-
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> OnPostRemove(int cartId)
-		{
-			// Retrieve the item in the cart
-			var item = _db.ShoppingCarts.FirstOrDefault(c => c.Id == cartId);
-
-			// Remove the item from the cart and update the database
-			_db.Remove(item);
-			await _db.SaveChangesAsync();
-			return RedirectToPage("Index");
-		}
 
 		public async Task<IActionResult> OnGetRemove(int cartId)
 		{

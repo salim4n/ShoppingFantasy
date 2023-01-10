@@ -77,7 +77,19 @@
                 <span asp-validation-for="ShoppingCart.Count" class="text-light" asp-val-range="1, 1000"></span>
         </div>
         <div class="col-12 pb-3">
-            <button type="submit" value="ProductDetails" class="btn btn-success btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    
+                    <button type="submit" value="ProductDetails" class="btn btn-success btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
+                    
+                }
+                else
+                {
+                    
+                    <a asp-page="/Account/Login" class="btn btn-dark">Veuillez vous connecter pour ajouter un article à votre panier.</a>
+                   
+                }
+            
         </div>
     </div>
 </div>
