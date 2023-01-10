@@ -6,10 +6,7 @@
 @{
     ViewData["Title"] = "Mon Panier";
 }
-@*
-<div class="row text-center pt-4 pb-4">
-    <h1>Mon Panier</h1>
-</div>*@
+
 
 <form method="post">
 	<br />
@@ -82,7 +79,7 @@
 					<div class="card-footer">
 						<div class="card-footer row">
 							<div class="col-sm-12 col-lg-4 col-md-6 offset-lg-8 offset-md-6 ">
-								<a asp-page="/MonPanier/Summary" class="btn btn-success form-control">Valider</a>
+								<a asp-page-handler="OnGetAsync" asp-page="./Summary" class="btn btn-success form-control">Valider</a>
 							</div>
 						</div>
 					</div>
