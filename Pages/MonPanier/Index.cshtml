@@ -25,8 +25,11 @@
 			</div>
 
 			<div class="card-body bg-secondary">
-				@foreach (var item in Model.ShoppingCart.ListCart)
+
+				@if (Model.ShoppingCart.ListCart.Count() != 0)
 				{
+					@foreach (var item in Model.ShoppingCart.ListCart)
+					{
 						<div class="row">
 							<div class="d-none d-lg-block col-lg-1 text-center py-2">
 								<img src="@item.Product.Picture.FirstOrDefault().PictureUrl" class="rounded" width="100%" />
@@ -39,60 +42,55 @@
 								<div class="col-4 text-md-right pt-4">
 									<h6>
 										<strong>
-										@item.Price.ToString("c")
+											@item.Price.ToString("c")
 											<span class="text-muted">&nbsp;x&nbsp;</span>@item.Count
 										</strong>
 									</h6>
 								</div>
-								<div class="col-6 col-sm-4 col-lg-6 pt-2">
-									<div class="w-75 btn-group" role="group">
-										<a asp-action="plus" asp-route-cartId="@item.Id" class="btn btn-success">
-											<i class="bi bi-plus-square"></i>
-										</a> &nbsp;
-										<a asp-action="minus" asp-route-cartId="@item.Id" class="btn btn-danger">
-											<i class="bi bi-dash-square"></i>
-										</a>
-									</div>
 
-								</div>
 								<div class="col-2 col-sm-4 col-lg-2 text-right pt-2">
-									<a asp-action="remove" asp-route-cartId="@item.Id" class="btn btn-dark">
-										<i class="bi bi-trash-fill"></i>
-									</a>
+									<a asp-page-handler="Remove" asp-route-cartId="@item.Id" class="btn btn-danger">Supprimer</a>
 								</div>
 							</div>
 						</div>
 						<hr />
-				}
-				<div class="row">
-					<div class="col-12 col-md-6 offset-md-6 col-lg-4 offset-lg-8 pr-4">
-						@if (Model.ShoppingCart.OrderHeader.FreeShipping)
-						{
-							<span class="badge badge-dark text-info">Livraison offerte</span>
-						}
-						else
-						{
-							<span class="badge badge-dark text-info">Livraison inclus dans le prix</span>
-						}
-						<ul class="list-group unlisted">
-							<li class="list-group-item d-flex justify-content-between bg-light">
-								<span class="text-info"> Total </span>
+					}
+					<div class="row">
+						<div class="col-12 col-md-6 offset-md-6 col-lg-4 offset-lg-8 pr-4">
+							@if (Model.ShoppingCart.OrderHeader.FreeShipping)
+							{
+								<span class="badge badge-dark text-info">Livraison offerte</span>
+								
+							}
+							else
+							{
+								<span class="badge badge-dark text-info">Livraison Payante</span><br />
+								<span class="badge badge-dark text-info">Cout de livraison : @Model.ShippingPrice.ToString("c")</span><br/>
+
+							}
+							<ul class="list-group unlisted">
+								<li class="list-group-item d-flex justify-content-between bg-light">
+									<span class="text-info"> Total </span>
 									<strong class="text-info">@Model.ShoppingCart.OrderHeader.OrderTotal.ToString("c")</strong>
-							</li>
-						</ul>
+								</li>
+							</ul>
+						</div>
 					</div>
-				</div>
-
-			</div>
-
-			<div class="card-footer">
-				<div class="card-footer row">
-					<div class="col-sm-12 col-lg-4 col-md-6 offset-lg-8 offset-md-6 ">
-						<a asp-action="Summary" class="btn btn-success form-control">Valider</a>
+					<div class="card-footer">
+						<div class="card-footer row">
+							<div class="col-sm-12 col-lg-4 col-md-6 offset-lg-8 offset-md-6 ">
+								<a asp-page="/MonPanier/Summary" class="btn btn-success form-control">Valider</a>
+							</div>
+						</div>
 					</div>
-				</div>
+				}
+				else
+				{
+					<div class="text-center text-info pt-4 pb-4">
+						<h3>Votre panier est vide</h3>
+					</div>
+				}
 			</div>
-		</div>
 	</div>
 </form>
 

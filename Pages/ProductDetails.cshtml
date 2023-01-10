@@ -73,7 +73,8 @@
         </div>
         <div class="col-12 pb-3">
             <h4 class="text-info">Nombre</h4>
-            <input asp-for="ShoppingCart.Count" class="form-control" />
+                <input asp-for="ShoppingCart.Count"  class="form-control" asp-val-range="1, 1000" />
+                <span asp-validation-for="ShoppingCart.Count" class="text-light" asp-val-range="1, 1000"></span>
         </div>
         <div class="col-12 pb-3">
             <button type="submit" value="ProductDetails" class="btn btn-success btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
@@ -83,15 +84,25 @@
 </form>
 
 
-<script>
-    //$(document).ready(function () {
-    //    $('#productModal-@Model.ShoppingCart.Product.Id').on('shown.bs.modal', function () {
-    $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel();
-            }).on('hidden.bs.modal', function () {
-        $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel('pause');
-    });
-        //});
-</script>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+
+        <script>
+            //$(document).ready(function () {
+            //    $('#productModal-@Model.ShoppingCart.Product.Id').on('shown.bs.modal', function () {
+            $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel();
+                        }).on('hidden.bs.modal', function () {
+                $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel('pause');
+            });
+                    //});
+        </script>
+    }
+}
+
+
+
 
 <style>
 

@@ -20,12 +20,12 @@ namespace ShoppingFantasy.Utility
         public const string StatusRembourse = "Rembourse";
 
 
-
         //Statut des paiements
         public const string PaiementStatusAttente = "En Attente";
         public const string PaiementStatusApprouve = "Approuve";
         public const string PaiementStatusPaiementSousTrenteJour = "Approuve pour paiement sous 30 jours";
         public const string PaiementStatusRejet = "Paiement Rejete";
+
 
         //session stripe
         public const string SessionCart = "SessionShoppingCart";

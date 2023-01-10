@@ -46,18 +46,45 @@ namespace ShoppingFantasy.Pages.MonPanier
             }
 
             if (cartVM.OrderHeader.OrderTotal > (double)SD.ShippingFreeCost)
+            {
                 cartVM.OrderHeader.FreeShipping = true;
+            }
             else
-				cartVM.OrderHeader.ShippingPrice += (double)SD.ShippingCost;
-			
-               
+            {
+                cartVM.OrderHeader.FreeShipping = false;
+                cartVM.OrderHeader.OrderTotal += (double)SD.ShippingCost;
+            }
 
-            ShoppingCart = cartVM;
+			ShoppingCart = cartVM;
 
             return Page();
         }
 
-        private double GetTotalPrice(ShoppingCart sp)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> OnPostRemove(int cartId)
+		{
+			// Retrieve the item in the cart
+			var item = _db.ShoppingCarts.FirstOrDefault(c => c.Id == cartId);
+
+			// Remove the item from the cart and update the database
+			_db.Remove(item);
+			await _db.SaveChangesAsync();
+			return RedirectToPage("Index");
+		}
+
+		public async Task<IActionResult> OnGetRemove(int cartId)
+		{
+			// Retrieve the item in the cart
+			var item = _db.ShoppingCarts.FirstOrDefault(c => c.Id == cartId);
+
+			// Remove the item from the cart and update the database
+			_db.Remove(item);
+			await _db.SaveChangesAsync();
+			return RedirectToPage("Index");
+		}
+
+
+		private double GetTotalPrice(ShoppingCart sp)
         {
             decimal productPrice;
 
@@ -67,6 +94,8 @@ namespace ShoppingFantasy.Pages.MonPanier
                 productPrice = sp.Product.Price;
             return (double)productPrice;
         }
+
+
 
     }
 }
