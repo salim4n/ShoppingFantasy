@@ -1,13 +1,13 @@
 ﻿@page
 @using Microsoft.AspNetCore.Authorization;
-@attribute [Authorize]
 
 @model ShoppingFantasy.Pages.MonPanier.IndexModel
 @{
     ViewData["Title"] = "Mon Panier";
 }
 
-
+@if (User.Identity.IsAuthenticated)
+{
 <form method="post">
 	<br />
 	<div class="container pt-4 pb-4">
@@ -79,7 +79,7 @@
 					<div class="card-footer">
 						<div class="card-footer row">
 							<div class="col-sm-12 col-lg-4 col-md-6 offset-lg-8 offset-md-6 ">
-								<a asp-page-handler="OnGetAsync" asp-page="./Summary" class="btn btn-success form-control">Valider</a>
+								<button type="submit" class="btn btn-success ">Valider</button>
 							</div>
 						</div>
 					</div>
@@ -92,6 +92,13 @@
 				}
 			</div>
 	</div>
-</form>
+	</form>
+}
+else
+{
+	<div class="text center pt-3">
+		<h3>Vous devez vous connecter pour voir votre panier</h3>
+	</div>
+}
 
 

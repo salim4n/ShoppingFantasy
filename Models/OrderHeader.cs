@@ -17,18 +17,16 @@ namespace ShoppingFantasy.Models
 
         [Required]
         [DisplayName("Date de l'ordre")]
-        public DateTime OrderDate { get; set; }
+        public DateTime? OrderDate { get; set; }
 
         [DisplayName("Date d'envoie")]
-        public DateTime ShippingDate { get; set; }
+        public DateTime? ShippingDate { get; set; }
 
         [DisplayName("Livraison Gratuite")]
         public bool FreeShipping { get; set; } = false;
 
         [DisplayName("Prix de la Livraison")]
-        public double ShippingPrice { get; set; } = 6;
-
-        public int MyProperty { get; set; }
+        public double? ShippingPrice { get; set; } = 6;
 
         [DisplayName("Total de l'ordre")]
         public double OrderTotal { get; set; }
@@ -46,10 +44,10 @@ namespace ShoppingFantasy.Models
         public string? Carrier { get; set; }
 
         [DisplayName("Date de paiement")]
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
 
         [DisplayName("Date de paiement differe")]
-        public DateTime PaymentDueDate { get; set; }
+        public DateTime? PaymentDueDate { get; set; }
 
         [DisplayName("Session Stripe")]
         public string? SessionId { get; set; }
@@ -59,29 +57,29 @@ namespace ShoppingFantasy.Models
 
         [Required]
         [DisplayName("Numero de telephone")]
-        public string PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         [Required]
         [DisplayName("Addresse")]
-        public string StreetAddress { get; set; }
+        public string? StreetAddress { get; set; }
 
         [Required]
         [DisplayName("Ville")]
-        public string City { get; set; }
+        public string? City { get; set; }
 
         [DisplayName("Complement d'addresse")]
-        public string AddressComplement { get; set; }
+        public string? AddressComplement { get; set; }
 
         [Required]
         [DisplayName("Code Postal")]
-        public string PostalCode { get; set; }
+        public string? PostalCode { get; set; }
 
         [Required]
         [DisplayName("Nom")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
         [Required]
         [DisplayName("Prenom")]
-        public string SurName { get; set; }
+        public string? SurName { get; set; }
     }
 }

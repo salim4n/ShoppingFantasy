@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShoppingFantasy.Data;
 
@@ -11,9 +12,11 @@ using ShoppingFantasy.Data;
 namespace ShoppingFantasy.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230112120750_orderHeaderUpdate")]
+    partial class orderHeaderUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -287,6 +290,7 @@ namespace ShoppingFantasy.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("AddressComplement")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AppUserId")
@@ -303,12 +307,14 @@ namespace ShoppingFantasy.Data.Migrations
                     b.Property<bool>("FreeShipping")
                         .HasColumnType("bit");
 
+                    b.Property<int>("MyProperty")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("OrderDate")
-                        .IsRequired()
+                    b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OrderStatus")
@@ -317,10 +323,10 @@ namespace ShoppingFantasy.Data.Migrations
                     b.Property<double>("OrderTotal")
                         .HasColumnType("float");
 
-                    b.Property<DateTime?>("PaymentDate")
+                    b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("PaymentDueDate")
+                    b.Property<DateTime>("PaymentDueDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentIntentId")
@@ -340,10 +346,10 @@ namespace ShoppingFantasy.Data.Migrations
                     b.Property<string>("SessionId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("ShippingDate")
+                    b.Property<DateTime>("ShippingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<double?>("ShippingPrice")
+                    b.Property<double>("ShippingPrice")
                         .HasColumnType("float");
 
                     b.Property<string>("StreetAddress")

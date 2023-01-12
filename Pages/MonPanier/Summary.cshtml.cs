@@ -4,7 +4,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
+using ShoppingFantasy.Utility;
 using ShoppingFantasy.ViewModels;
+using Stripe;
+using Stripe.Checkout;
+using System.Collections.Generic;
 using System.Security.Claims;
 
 namespace ShoppingFantasy.Pages.MonPanier
@@ -65,8 +69,83 @@ namespace ShoppingFantasy.Pages.MonPanier
 				ListCart = await _db.ShoppingCarts.Include(s => s.Product).Where(s => s.ApplicationUserId == claim.Value).ToListAsync(),
 			};
 
-			ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
-			ShoppingCartVM.OrderHeader.AppUserId = claim.Value;
+			shoppingCart.OrderHeader.OrderDate = DateTime.Now;
+			shoppingCart.OrderHeader.AppUserId = claim.Value;
+
+			foreach (var cart in shoppingCart.ListCart)
+			{
+				cart.Price = GetTotalPrice(cart);
+				shoppingCart.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+			}
+			AppUser applicationUser = await _db.AppUsers.FirstOrDefaultAsync(u => u.Id == claim.Value);
+
+			shoppingCart.OrderHeader.PaymentStatus = SD.PaiementStatusAttente;
+			shoppingCart.OrderHeader.OrderStatus = SD.StatusAttente;
+
+			await _db.OrderHeaders.AddAsync(ShoppingCartVM.OrderHeader);
+			await _db.SaveChangesAsync();
+
+			foreach (var cart in shoppingCart.ListCart)
+			{
+				OrderDetails orderDetails = new()
+				{
+					ProductId = cart.ProductId,
+					OrderId = shoppingCart.OrderHeader.Id,
+					Price = cart.Price,
+					Count = cart.Count
+				};
+
+				await _db.OrderDetails.AddAsync(orderDetails);
+				await _db.SaveChangesAsync();
+			}
+
+
+			//stripe session
+			var domain = "https://localhost:7138";
+			var options = new SessionCreateOptions
+			{
+				PaymentMethodTypes = new List<string>
+				{
+					"card",
+				},
+				LineItems = new List<SessionLineItemOptions>()
+				,
+				Mode = "payment",
+				SuccessUrl = domain + $"/monpanier/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
+				CancelUrl = domain + $"/monpanier/index",
+			};
+
+			foreach (var item in shoppingCart.ListCart)
+			{
+				var sessionLineItem = new SessionLineItemOptions
+				{
+					PriceData = new SessionLineItemPriceDataOptions
+					{
+						UnitAmount = (long)(item.Price * 100),
+						Currency = "eur",
+						ProductData = new SessionLineItemPriceDataProductDataOptions
+						{
+							Name = item.Product.Name,
+						},
+					},
+					Quantity = item.Count,
+				};
+
+				options.LineItems.Add(sessionLineItem);
+			}
+
+			var service = new SessionService();
+			Session session = service.Create(options);
+			var orderFromDb = _db.OrderHeaders.FirstOrDefault(o => o.Id == shoppingCart.OrderHeader.Id);
+			orderFromDb.PaymentDate = DateTime.Now;
+			orderFromDb.SessionId = session.Id;
+			orderFromDb.PaymentIntentId = session.PaymentIntentId;
+			_db.SaveChanges();
+			Response.Headers.Add("Location", session.Url);
+
+			ShoppingCartVM = shoppingCart;
+
+			return new StatusCodeResult(303);
 		}
 
 		private double GetTotalPrice(ShoppingCart sp)
