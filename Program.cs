@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
 using ShoppingFantasy.Utility;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
@@ -42,7 +44,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:SecretKey").Get<string>();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapRazorPages();
 

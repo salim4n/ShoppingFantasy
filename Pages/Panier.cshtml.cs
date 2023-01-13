@@ -10,20 +10,20 @@ using ShoppingFantasy.ViewModels;
 using Stripe.Checkout;
 using System.Security.Claims;
 
-namespace ShoppingFantasy.Pages.MonPanier
+namespace ShoppingFantasy.Pages
 {
 
-    public class IndexModel : PageModel
+    public class PanierModel : PageModel
     {
         private readonly ApplicationDbContext _db;
 
-        public IndexModel(ApplicationDbContext db)
+        public PanierModel(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        [BindProperty]
-        public ShoppingCartVM ShoppingCart { get; set; } = default!;
+        
+        public ShoppingCartVM ShoppingCart { get; set; }
 
         public decimal ShippingPrice { get; } = SD.ShippingCost;
 
@@ -67,49 +67,18 @@ namespace ShoppingFantasy.Pages.MonPanier
             }
             else
             {
-				return RedirectToPage("Identity/Account/Login");
+				return RedirectToPage("Index");
             }
             
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-			var claimsIdentity = (ClaimsIdentity)User.Identity;
-			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            return RedirectToPage("Sommaire");
+        }
 
-			var shoppingCart = new ShoppingCartVM()
-			{
-				ListCart = await _db.ShoppingCarts.Include(s => s.Product).Where(s => s.ApplicationUserId == claim.Value).ToListAsync(),
-				OrderHeader = new()
 
-			};
-
-			shoppingCart.OrderHeader.AppUser = await _db.AppUsers.FirstOrDefaultAsync(o => o.Id == claim.Value);
-
-			shoppingCart.OrderHeader.Name = shoppingCart.OrderHeader.AppUser.Name;
-			shoppingCart.OrderHeader.SurName = shoppingCart.OrderHeader.AppUser.Surname;
-			shoppingCart.OrderHeader.StreetAddress = shoppingCart.OrderHeader.AppUser.Address;
-			shoppingCart.OrderHeader.City = shoppingCart.OrderHeader.AppUser.City;
-			shoppingCart.OrderHeader.PostalCode = shoppingCart.OrderHeader.AppUser.PostalCode;
-			shoppingCart.OrderHeader.AddressComplement = shoppingCart.OrderHeader.AppUser.AddressComplement;
-
-			foreach (var cart in shoppingCart.ListCart)
-			{
-				cart.Price = GetTotalPrice(cart);
-				shoppingCart.OrderHeader.OrderTotal += (cart.Price * cart.Count);
-			}
-
-			//await _db.AddAsync(shoppingCart.OrderHeader);
-			//await _db.SaveChangesAsync();
-			ShoppingCart = shoppingCart;
-
-			return Redirect("MonPanier/Test"/*, new {ShoppingCart = shoppingCart}*/);
-		}
-
-		
-	
-
-		public async Task<IActionResult> OnGetRemove(int cartId)
+        public async Task<IActionResult> OnGetRemove(int cartId)
 		{
 			// Retrieve the item in the cart
 			var item = _db.ShoppingCarts.FirstOrDefault(c => c.Id == cartId);
@@ -117,7 +86,7 @@ namespace ShoppingFantasy.Pages.MonPanier
 			// Remove the item from the cart and update the database
 			_db.Remove(item);
 			await _db.SaveChangesAsync();
-			return RedirectToPage("Index");
+			return RedirectToPage("Panier");
 		}
 
 

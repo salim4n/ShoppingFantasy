@@ -8,11 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\MonPanier\Summary.cshtml" />
-    <Content Remove="Pages\MonPanier\Test.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MailKit" Version="3.4.3" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.1" />
@@ -28,21 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\MonPanier\Summary.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Pages\MonPanier\Summary.cshtml" />
-    <_ContentIncludedByDefault Remove="Pages\MonPanier\Test.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\MonPanier\Summary.cshtml" />
-    <None Include="Pages\MonPanier\Test.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Pages\MonPanier\Test.cshtml" />
+    <None Include="Pages\Sommaire.cshtml" />
   </ItemGroup>
 
 </Project>

@@ -11,14 +11,14 @@ using Stripe.Checkout;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace ShoppingFantasy.Pages.MonPanier
+namespace ShoppingFantasy.Pages
 {
 	
-	public class SummaryModel : PageModel
+	public class SommaireModel : PageModel
     {
         private readonly ApplicationDbContext _db;
 
-		public SummaryModel(ApplicationDbContext db)
+		public SommaireModel(ApplicationDbContext db)
 		{
 			_db = db;
 		}
@@ -27,7 +27,7 @@ namespace ShoppingFantasy.Pages.MonPanier
 		public ShoppingCartVM ShoppingCartVM { get; set; } = default!;
 		public int OrderTotal { get; set; }
 
-		public async Task<IActionResult> OnGetAsync()
+		public async Task OnGetAsync()
         {
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -56,7 +56,7 @@ namespace ShoppingFantasy.Pages.MonPanier
 
 			ShoppingCartVM = shoppingCart;
 
-			return await Task.FromResult(Page());
+			
 		}
 
 		public async Task<IActionResult> OnPostAsync()
