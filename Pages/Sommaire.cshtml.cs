@@ -67,7 +67,9 @@ namespace ShoppingFantasy.Pages
 			var shoppingCart = new ShoppingCartVM()
 			{
 				ListCart = await _db.ShoppingCarts.Include(s => s.Product).Where(s => s.ApplicationUserId == claim.Value).ToListAsync(),
+				OrderHeader = new()
 			};
+
 
 			shoppingCart.OrderHeader.OrderDate = DateTime.Now;
 			shoppingCart.OrderHeader.AppUserId = claim.Value;
@@ -81,8 +83,16 @@ namespace ShoppingFantasy.Pages
 
 			shoppingCart.OrderHeader.PaymentStatus = SD.PaiementStatusAttente;
 			shoppingCart.OrderHeader.OrderStatus = SD.StatusAttente;
+			shoppingCart.OrderHeader.AppUserId = applicationUser.Id;
+			shoppingCart.OrderHeader.City = ShoppingCartVM.OrderHeader.City;
+			shoppingCart.OrderHeader.Name = ShoppingCartVM.OrderHeader.Name;
+			shoppingCart.OrderHeader.SurName = ShoppingCartVM.OrderHeader.SurName;
+			shoppingCart.OrderHeader.StreetAddress = ShoppingCartVM.OrderHeader.StreetAddress;
+			shoppingCart.OrderHeader.AddressComplement = ShoppingCartVM.OrderHeader.AddressComplement;
+			shoppingCart.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.PostalCode;
+			shoppingCart.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.PhoneNumber;
 
-			await _db.OrderHeaders.AddAsync(ShoppingCartVM.OrderHeader);
+			await _db.OrderHeaders.AddAsync(shoppingCart.OrderHeader);
 			await _db.SaveChangesAsync();
 
 			foreach (var cart in shoppingCart.ListCart)
