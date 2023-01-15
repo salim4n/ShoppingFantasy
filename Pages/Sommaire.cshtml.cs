@@ -32,6 +32,7 @@ namespace ShoppingFantasy.Pages
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
+
 			var shoppingCart = new ShoppingCartVM()
 			{
 				ListCart = await _db.ShoppingCarts.Include(s => s.Product).Where(s => s.ApplicationUserId == claim.Value).ToListAsync(),
@@ -121,12 +122,13 @@ namespace ShoppingFantasy.Pages
 				LineItems = new List<SessionLineItemOptions>()
 				,
 				Mode = "payment",
-				SuccessUrl = domain + $"/monpanier/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
-				CancelUrl = domain + $"/monpanier/index",
+				SuccessUrl = domain + $"/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
+				CancelUrl = domain + $"/Panier",
 			};
 
 			foreach (var item in shoppingCart.ListCart)
 			{
+
 				var sessionLineItem = new SessionLineItemOptions
 				{
 					PriceData = new SessionLineItemPriceDataOptions
@@ -154,7 +156,6 @@ namespace ShoppingFantasy.Pages
 			Response.Headers.Add("Location", session.Url);
 
 			ShoppingCartVM = shoppingCart;
-
 			return new StatusCodeResult(303);
 		}
 
@@ -168,5 +169,6 @@ namespace ShoppingFantasy.Pages
 				productPrice = sp.Product.Price;
 			return (double)productPrice;
 		}
-	}
+
+    }
 }

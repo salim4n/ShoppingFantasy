@@ -26,3 +26,17 @@
         }, 3000);
     </script>
 }
+
+@if (TempData.ContainsKey("Error"))
+{
+
+    <div id="alert-message" class="alert alert-danger pt-3 rounded text-center" role="alert">
+        <h4>@TempData["Error"]</h4>
+    </div>
+
+    <script>
+        setTimeout(function () {
+            document.getElementById("alert-message").style.display = "none";
+        }, 3000);
+    </script>
+}

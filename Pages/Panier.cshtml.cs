@@ -67,6 +67,7 @@ namespace ShoppingFantasy.Pages
             }
             else
             {
+                TempData["Error"] = "Vous devez etre connecté pour voir votre panier";
 				return RedirectToPage("Index");
             }
             
