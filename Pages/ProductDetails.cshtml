@@ -103,13 +103,11 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
 
         <script>
-            //$(document).ready(function () {
-            //    $('#productModal-@Model.ShoppingCart.Product.Id').on('shown.bs.modal', function () {
+            $(document).ready(function () {  
             $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel();
-                        }).on('hidden.bs.modal', function () {
-                $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel('pause');
-            });
-                    //});
+            }
+        
+                   
         </script>
     }
 }
