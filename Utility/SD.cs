@@ -13,18 +13,18 @@ namespace ShoppingFantasy.Utility
 
         //Statut des ordres
         public const string StatusAttente = "En Attente";
-        public const string StatusApprouve = "Approuve";
+        public const string StatusApprouve = "Approuvé";
         public const string StatusEnCours = "En Cours";
-        public const string StatusEnvoye = "Envoye";
-        public const string StatusAnnule = "Annule";
-        public const string StatusRembourse = "Rembourse";
+        public const string StatusEnvoye = "Envoyé";
+        public const string StatusAnnule = "Annulé";
+        public const string StatusRembourse = "Remboursé";
 
 
         //Statut des paiements
         public const string PaiementStatusAttente = "En Attente";
-        public const string PaiementStatusApprouve = "Approuve";
+        public const string PaiementStatusApprouve = "Approuvé";
         public const string PaiementStatusPaiementSousTrenteJour = "Approuve pour paiement sous 30 jours";
-        public const string PaiementStatusRejet = "Paiement Rejete";
+        public const string PaiementStatusRejet = "Paiement Rejeté";
 
 
         //session stripe
