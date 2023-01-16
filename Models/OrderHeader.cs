@@ -16,11 +16,13 @@ namespace ShoppingFantasy.Models
         public AppUser AppUser { get; set; }
 
         [Required]
-        [DisplayName("Date de l'ordre")]
-        public DateTime? OrderDate { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+		[DisplayName("Date de l'ordre")]
+        public DateTime? OrderDate { get; set; } 
 
         [DisplayName("Date d'envoie")]
-        public DateTime? ShippingDate { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+		public DateTime? ShippingDate { get; set; } 
 
         [DisplayName("Livraison Gratuite")]
         public bool FreeShipping { get; set; } = false;
@@ -44,10 +46,12 @@ namespace ShoppingFantasy.Models
         public string? Carrier { get; set; }
 
         [DisplayName("Date de paiement")]
-        public DateTime? PaymentDate { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+		public DateTime? PaymentDate { get; set; }
 
         [DisplayName("Date de paiement differe")]
-        public DateTime? PaymentDueDate { get; set; }
+		[DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")]
+		public DateTime? PaymentDueDate { get; set; }
 
         [DisplayName("Session Stripe")]
         public string? SessionId { get; set; }

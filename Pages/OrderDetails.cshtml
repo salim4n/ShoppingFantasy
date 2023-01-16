@@ -1,0 +1,273 @@
+﻿@page
+@model ShoppingFantasy.Pages.OrderDetailsModel
+@using ShoppingFantasy.Utility
+@using ShoppingFantasy.ViewModels;
+@{
+    ViewData["Title"] = "Detail de l'ordre";
+}
+
+<form method="post">
+	<input asp-for="OrderVM.OrderHeader.Id" hidden />
+	<br />
+	<div class="container">
+		<div class="card">
+			<div class="card-header bg-dark text-light ml-0">
+				<div class="container row">
+					<div class="col-12 d-none d-md-block col-md-6 pb-1">
+						<i class="fas fa-shopping-cart"></i> &nbsp; Resumé
+					</div>
+					<div class="col-12 col-md-4 offset-md-2 text-right">
+						<a asp-page="Index" class="btn btn-outline-info form-control btn-sm">Retour Boutique</a>
+					</div>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="container rounded p-2">
+					<div class="row">
+						<div class="col-12 col-lg-6 pb-4">
+							<div class="row">
+								<h4 class="d-flex justify-content-between align-items-center mb-3">
+									<span class="text-primary">Détails :</span>
+								</h4>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Nom</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin))
+									{
+										<input asp-for="OrderVM.OrderHeader.Name" type="text" class="form-control" />
+										<span asp-validation-for="OrderVM.OrderHeader.Name" class="text-danger"></span>
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.Name" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Telephone</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin))
+									{
+										<input asp-for="OrderVM.OrderHeader.PhoneNumber" type="text" class="form-control" />
+										<span asp-validation-for="OrderVM.OrderHeader.PhoneNumber" class="text-danger"></span>
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.PhoneNumber" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Adresse</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin) )
+									{
+										<input asp-for="OrderVM.OrderHeader.StreetAddress" type="text" class="form-control" />
+										<span asp-validation-for="OrderVM.OrderHeader.StreetAddress" class="text-danger"></span>
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.StreetAddress" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">City</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin))
+									{
+										<input asp-for="OrderVM.OrderHeader.City" type="text" class="form-control" />
+										<span asp-validation-for="OrderVM.OrderHeader.City" class="text-danger"></span>
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.City" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Complément d'adresse</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin))
+									{
+										<input asp-for="OrderVM.OrderHeader.AddressComplement" type="text" class="form-control" />
+										<span asp-validation-for="OrderVM.OrderHeader.AddressComplement" class="text-danger"></span>
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.AddressComplement" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Code Postal</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin))
+									{
+										<input asp-for="OrderVM.OrderHeader.PostalCode" type="text" class="form-control" />
+										<span asp-validation-for="OrderVM.OrderHeader.PostalCode" class="text-danger"></span>
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.PostalCode" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">E-mail</div>
+								<div class="col-9">
+									<input asp-for="OrderVM.OrderHeader.AppUser.Email" readonly type="text" class="form-control" />
+									
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Date de l'ordre</div>
+								<div class="col-9">
+
+									<input value="@Model.OrderVM.OrderHeader.OrderDate" readonly type="text" class="form-control" />
+
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Mode de Livraison</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin))
+									{
+										<input asp-for="OrderVM.OrderHeader.Carrier" id="carrier" type="text" class="form-control" />
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.Carrier" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">No de Suivie</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin))
+									{
+										<input asp-for="OrderVM.OrderHeader.TrackingNumber" id="trackingNumber" type="text" class="form-control" />
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.TrackingNumber" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Date d'envoi</div>
+								<div class="col-9">
+									<input value="@Model.OrderVM.OrderHeader.ShippingDate" type="text" readonly class="form-control" />
+								</div>
+							</div>
+							@if (User.IsInRole(SD.Role_Admin))
+							{
+								<div class="row my-1">
+									<div class="col-3">Session ID</div>
+									<div class="col-9">
+										<input asp-for="OrderVM.OrderHeader.SessionId" type="text" readonly class="form-control" />
+									</div>
+								</div>
+								<div class="row my-1">
+									<div class="col-3">Paiement stripe ID</div>
+									<div class="col-9">
+										<input asp-for="OrderVM.OrderHeader.PaymentIntentId" type="text" readonly class="form-control" />
+									</div>
+								</div>
+							}
+							<div class="row my-1">
+								@if (Model.OrderVM.OrderHeader.SessionId == null)
+								{
+									<div class="col-3">Paiement dernier delais</div>
+									<div class="col-9">
+										<input value="@Model.OrderVM.OrderHeader.PaymentDueDate"
+										   readonly type="text" class="form-control" />
+									</div>
+								}
+								else
+								{
+									<div class="col-3">date de Paiement</div>
+									<div class="col-9">
+										<input value="@Model.OrderVM.OrderHeader.PaymentDate"
+										   readonly id="paymentDate" type="text" class="form-control" />
+									</div>
+								}
+							</div>
+							<div class="row my-1">
+								<div class="col-3">Statut du Paiement</div>
+								<div class="col-9">
+									<input asp-for="OrderVM.OrderHeader.PaymentStatus" type="text" readonly class="form-control" />
+								</div>
+							</div>
+							<input type="submit" asp-page-handler="UpdateOrderDetail" class="btn btn-success form-control my-1" value="Update Order Details" />
+
+
+
+						</div>
+						<div class="col-12 col-lg-5 offset-lg-1">
+							<h4 class="d-flex justify-content-between align-items-center mb-3">
+								<span class="text-primary">Sommaire</span>
+							</h4>
+							<label class="btn btn-outline-primary form-control my-2">Order Status - @Model.OrderVM.OrderHeader.OrderStatus</label>
+
+							<ul class="list-group mb-3">
+								@foreach (var detail in Model.OrderVM.OrderDetails)
+								{
+									<li class="list-group-item d-flex justify-content-between p-2">
+										<div class="row container">
+											<div class="col-8">
+
+												<h6 class="my-0 text-primary">@detail.Product.Name</h6>
+												<small class="text-muted">Price : @detail.Price.ToString("c")</small><br />
+												<small class="text-muted">Quantity : @detail.Count</small>
+											</div>
+											<div class="col-4 text-end">
+												<p class="text-success">@((detail.Count * detail.Price).ToString("c"))</p>
+											</div>
+										</div>
+									</li>
+								}
+								<li class="list-group-item bg-info">
+									<div class="row container">
+										<div class="col-6">
+											<h5 class="text-white">TOTAL </h5>
+										</div>
+										<div class="col-6 text-end">
+											<h5 class="text-white">@Model.OrderVM.OrderHeader.OrderTotal.ToString("c")</h5>
+										</div>
+									</div>
+								</li>
+							</ul>
+							@if (Model.OrderVM.OrderHeader.PaymentStatus == SD.PaiementStatusPaiementSousTrenteJour &&
+									Model.OrderVM.OrderHeader.OrderStatus == SD.StatusEnvoye)
+							{
+								<input type="submit" class="btn btn-success form-control my-1" value="Pay Now" />
+							}
+							@if (User.IsInRole(SD.Role_Admin))
+							{
+								if (Model.OrderVM.OrderHeader.OrderStatus == SD.StatusApprouve)
+								{
+									<input type="submit" asp-page-handler="StartProcessing" class="btn btn-primary form-control my-1" value="Start Processing" />
+								}
+								if (Model.OrderVM.OrderHeader.OrderStatus == SD.StatusEnCours)
+								{
+									<input type="submit" onclick="return validateInput()"
+								   asp-page-handler="ShipOrder" class="btn btn-primary form-control my-1" value="Ship Order" />
+								}
+
+								@if (Model.OrderVM.OrderHeader.OrderStatus != SD.StatusRembourse &&
+										Model.OrderVM.OrderHeader.OrderStatus != SD.StatusAnnule &&
+										Model.OrderVM.OrderHeader.OrderStatus != SD.StatusEnvoye)
+								{
+									<input type="submit" asp-page-handler="CancelOrder" class="btn btn-danger form-control my-1" value="Cancel Order" />
+								}
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+

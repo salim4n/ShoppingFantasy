@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Mes Ordres";
 
-    
 }
 
 
@@ -60,7 +59,7 @@
                     @item.OrderTotal.ToString("c")
                 </td>
                 <td>
-                    <a asp-page="./OrderDetail" asp-route-id="@item.Id" class="btn btn-sm btn-info"><i class="bi bi-eye-fill"></i></a>
+                    <a asp-page="OrderDetails" asp-route-orderId="@item.Id" class="btn btn-sm btn-info"><i class="bi bi-eye-fill"></i></a>
                 </td>
             </tr>
         }
