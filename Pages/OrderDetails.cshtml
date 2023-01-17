@@ -124,7 +124,7 @@
 									}
 									else
 									{
-										<input asp-for="OrderVM.OrderHeader.PostalCode"  type="text" class="form-control" />
+										<input asp-for="OrderVM.OrderHeader.PostalCode" readonly  type="text" class="form-control" />
 									}
 								</div>
 							</div>
@@ -214,11 +214,11 @@
 									<input asp-for="OrderVM.OrderHeader.PaymentStatus" type="text" readonly class="form-control" />
 								</div>
 							</div>
-							@*@if (User.IsInRole(SD.Role_Admin))*@
+							@if (User.IsInRole(SD.Role_Admin))
+							{
+								<button type="submit" asp-page-handler="OnPost" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-success my-3">Mettre à jour</button>
+							}
 
-							<button type="submit" asp-page-handler="OnPost" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-success my-3">Mettre à jour</button>
-
-							
 							
 						</div>
 						<div class="col-12 col-lg-5 offset-lg-1">
