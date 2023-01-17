@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ShoppingFantasy.Data;
+using ShoppingFantasy.DbInitializer;
 using ShoppingFantasy.Models;
 using ShoppingFantasy.Utility;
 using Stripe;
@@ -20,7 +21,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
     .AddDefaultTokenProviders();
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 builder.Services.AddRazorPages();
@@ -45,7 +46,7 @@ app.UseStaticFiles();
 app.UseRouting();
 
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSettings:SecretKey").Get<string>();
-
+SeedDatabase();
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -53,3 +54,13 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+
+
+void SeedDatabase()
+{
+	using (var scope = app.Services.CreateScope())
+	{
+		var dbInitializer = scope.ServiceProvider.GetRequiredService<IDbInitializer>();
+		dbInitializer.Initialize();
+	}
+}

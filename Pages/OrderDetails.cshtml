@@ -264,19 +264,20 @@
 							{
 								if (Model.OrderVM.OrderHeader.OrderStatus == SD.StatusApprouve)
 								{
-									<input type="submit" asp-page-handler="StartProcessing" class="btn btn-primary form-control my-1" value="Start Processing" />
+									<input type="submit" asp-page-handler="OnPostStartProcessing" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-primary form-control my-1" value="Preparer la commande" />
 								}
 								if (Model.OrderVM.OrderHeader.OrderStatus == SD.StatusEnCours)
 								{
 									<input type="submit" onclick="return validateInput()"
-								   asp-page-handler="ShipOrder" class="btn btn-primary form-control my-1" value="Ship Order" />
+								   asp-page-handler="OnPostShipOrder" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-primary form-control my-1" value="Ship Order" />
 								}
 
 								@if (Model.OrderVM.OrderHeader.OrderStatus != SD.StatusRembourse &&
 										Model.OrderVM.OrderHeader.OrderStatus != SD.StatusAnnule &&
 										Model.OrderVM.OrderHeader.OrderStatus != SD.StatusEnvoye)
 								{
-									<input type="submit" asp-page-handler="CancelOrder"  class="btn btn-danger form-control my-1" value="Cancel Order" />
+
+									<input type="submit" asp-page-handler="OnPostCancelOrder" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-danger form-control my-1" value="Annuler/Rembourser" />
 								}
 							}
 						</div>
