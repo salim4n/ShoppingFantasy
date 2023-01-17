@@ -9,7 +9,7 @@
 
 <div class= "pt-5 container ">
     <div class="text-center pb-2">
-        <h3 class="text-info">Mes Ordres</h3class>
+        <h3 class="text-info">Mes Ordres</h3>
     </div>
 <table class="table table-sm table-secondary table-hover ">
     <thead>
@@ -54,6 +54,7 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.OrderStatus)
                 </td>
+
                 <td>
                     @*@Html.DisplayFor(modelItem => item.OrderTotal)*@
                     @item.OrderTotal.ToString("c")

@@ -45,6 +45,20 @@
 								</div>
 							</div>
 							<div class="row my-1">
+								<div class="col-3">Prénom</div>
+								<div class="col-9">
+									@if (User.IsInRole(SD.Role_Admin))
+									{
+										<input asp-for="OrderVM.OrderHeader.SurName" type="text" class="form-control" />
+										<span asp-validation-for="OrderVM.OrderHeader.SurName" class="text-danger"></span>
+									}
+									else
+									{
+										<input asp-for="OrderVM.OrderHeader.SurName" readonly type="text" class="form-control" />
+									}
+								</div>
+							</div>
+							<div class="row my-1">
 								<div class="col-3">Telephone</div>
 								<div class="col-9">
 									@if (User.IsInRole(SD.Role_Admin))
@@ -110,7 +124,7 @@
 									}
 									else
 									{
-										<input asp-for="OrderVM.OrderHeader.PostalCode" readonly type="text" class="form-control" />
+										<input asp-for="OrderVM.OrderHeader.PostalCode"  type="text" class="form-control" />
 									}
 								</div>
 							</div>
@@ -200,10 +214,12 @@
 									<input asp-for="OrderVM.OrderHeader.PaymentStatus" type="text" readonly class="form-control" />
 								</div>
 							</div>
-							<input type="submit" asp-page-handler="UpdateOrderDetail" class="btn btn-success form-control my-1" value="Update Order Details" />
+							@*@if (User.IsInRole(SD.Role_Admin))*@
 
+							<button type="submit" asp-page-handler="OnPost" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-success my-3">Mettre à jour</button>
 
-
+							
+							
 						</div>
 						<div class="col-12 col-lg-5 offset-lg-1">
 							<h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -260,7 +276,7 @@
 										Model.OrderVM.OrderHeader.OrderStatus != SD.StatusAnnule &&
 										Model.OrderVM.OrderHeader.OrderStatus != SD.StatusEnvoye)
 								{
-									<input type="submit" asp-page-handler="CancelOrder" class="btn btn-danger form-control my-1" value="Cancel Order" />
+									<input type="submit" asp-page-handler="CancelOrder"  class="btn btn-danger form-control my-1" value="Cancel Order" />
 								}
 							}
 						</div>
@@ -271,3 +287,9 @@
 	</div>
 </form>
 
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+}
