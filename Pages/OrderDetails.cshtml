@@ -1,7 +1,6 @@
 ﻿@page
 @model ShoppingFantasy.Pages.OrderDetailsModel
 @using ShoppingFantasy.Utility
-@using ShoppingFantasy.ViewModels;
 @{
     ViewData["Title"] = "Detail de l'ordre";
 }
@@ -139,7 +138,7 @@
 								<div class="col-3">Date de l'ordre</div>
 								<div class="col-9">
 
-									<input value="@Model.OrderVM.OrderHeader.OrderDate" readonly type="text" class="form-control" />
+									<input asp-for="OrderVM.OrderHeader.OrderDate" readonly type="text" class="form-control" />
 
 								</div>
 							</div>
@@ -172,7 +171,7 @@
 							<div class="row my-1">
 								<div class="col-3">Date d'envoi</div>
 								<div class="col-9">
-									<input value="@Model.OrderVM.OrderHeader.ShippingDate" type="text" readonly class="form-control" />
+									<input asp-for="OrderVM.OrderHeader.ShippingDate" type="text" readonly class="form-control" />
 								</div>
 							</div>
 							@if (User.IsInRole(SD.Role_Admin))
@@ -191,24 +190,6 @@
 								</div>
 							}
 							<div class="row my-1">
-								@if (Model.OrderVM.OrderHeader.SessionId == null)
-								{
-									<div class="col-3">Paiement dernier delais</div>
-									<div class="col-9">
-										<input value="@Model.OrderVM.OrderHeader.PaymentDueDate"
-										   readonly type="text" class="form-control" />
-									</div>
-								}
-								else
-								{
-									<div class="col-3">date de Paiement</div>
-									<div class="col-9">
-										<input value="@Model.OrderVM.OrderHeader.PaymentDate"
-										   readonly id="paymentDate" type="text" class="form-control" />
-									</div>
-								}
-							</div>
-							<div class="row my-1">
 								<div class="col-3">Statut du Paiement</div>
 								<div class="col-9">
 									<input asp-for="OrderVM.OrderHeader.PaymentStatus" type="text" readonly class="form-control" />
@@ -216,7 +197,7 @@
 							</div>
 							@if (User.IsInRole(SD.Role_Admin))
 							{
-								<button type="submit" asp-page-handler="OnPost" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-success my-3">Mettre à jour</button>
+								<button type="submit" asp-page-handler="Update" asp-route-orderId="OrderVM.OrderHeader.Id" class="btn btn-success my-3">Mettre à jour</button>
 							}
 
 							
@@ -226,6 +207,7 @@
 								<span class="text-primary">Sommaire</span>
 							</h4>
 							<label class="btn btn-outline-primary form-control my-2">Order Status - @Model.OrderVM.OrderHeader.OrderStatus</label>
+
 
 							<ul class="list-group mb-3">
 								@foreach (var detail in Model.OrderVM.OrderDetails)
@@ -255,21 +237,17 @@
 									</div>
 								</li>
 							</ul>
-							@if (Model.OrderVM.OrderHeader.PaymentStatus == SD.PaiementStatusPaiementSousTrenteJour &&
-									Model.OrderVM.OrderHeader.OrderStatus == SD.StatusEnvoye)
-							{
-								<input type="submit" class="btn btn-success form-control my-1" value="Pay Now" />
-							}
 							@if (User.IsInRole(SD.Role_Admin))
 							{
 								if (Model.OrderVM.OrderHeader.OrderStatus == SD.StatusApprouve)
 								{
-									<input type="submit" asp-page-handler="OnPostStartProcessing" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-primary form-control my-1" value="Preparer la commande" />
+									<a  asp-page-handler="StartProcessing" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-primary form-control my-1" >Préparer la commande</a>
 								}
 								if (Model.OrderVM.OrderHeader.OrderStatus == SD.StatusEnCours)
 								{
-									<input type="submit" onclick="return validateInput()"
-								   asp-page-handler="OnPostShipOrder" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-primary form-control my-1" value="Ship Order" />
+
+									<a onclick="return validateInput()"
+							   asp-page-handler="ShipOrder" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-primary form-control my-1"> Envoyer</a>
 								}
 
 								@if (Model.OrderVM.OrderHeader.OrderStatus != SD.StatusRembourse &&
@@ -277,7 +255,7 @@
 										Model.OrderVM.OrderHeader.OrderStatus != SD.StatusEnvoye)
 								{
 
-									<input type="submit" asp-page-handler="OnPostCancelOrder" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-danger form-control my-1" value="Annuler/Rembourser" />
+									<a  asp-page-handler="CancelOrder"  asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-danger form-control my-1">Annuler</a>
 								}
 							}
 						</div>
@@ -290,7 +268,21 @@
 
 
 @section Scripts {
-	@{
-		await Html.RenderPartialAsync("_ValidationScriptsPartial");
-	}
+	<partial name="_ValidationScriptsPartial" />
+	<script>
+		function validateInput() 
+		{
+			if (document.getElementById("trackingNumber").value == "") 
+			{
+				window.alert("vous devez remplir les informations de livraisons !")
+				return false;
+			}
+			if (document.getElementById("carrier").value == "") 
+			{
+				window.alert("vous devez remplir les informations de livraisons !")
+				return false;
+			}
+			return true;
+		}
+	</script>
 }
