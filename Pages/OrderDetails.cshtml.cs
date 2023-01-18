@@ -1,23 +1,25 @@
-using MailKit.Search;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using ShoppingFantasy.Data;
-using ShoppingFantasy.Models;
 using ShoppingFantasy.Utility;
 using ShoppingFantasy.ViewModels;
 using Stripe;
+using System.Text.Encodings.Web;
 
 namespace ShoppingFantasy.Pages
 {
 	public class OrderDetailsModel : PageModel
 	{
 		public readonly ApplicationDbContext _db;
+		public readonly IEmailSender _emailSender;
 
 		public OrderDetailsModel(ApplicationDbContext db
-			)
+								, IEmailSender emailSender)
 		{
 			_db = db;
+			_emailSender = emailSender;
 		}
 
 		[BindProperty]
@@ -87,13 +89,19 @@ namespace ShoppingFantasy.Pages
 
 		public async Task<IActionResult> OnGetShipOrder(int orderId)
 		{
-			var order = await _db.OrderHeaders.FirstOrDefaultAsync(o => o.Id == orderId);
+			var order = await _db.OrderHeaders
+				.Include(o => o.AppUser)
+				.FirstOrDefaultAsync(o => o.Id == orderId);
 			order.OrderStatus = SD.StatusEnvoye;
 			order.ShippingDate = DateTime.Now;
 
-			 _db.Update(order);
+			_db.Update(order);
 			await _db.SaveChangesAsync();
-			TempData["Success"] = $"statut passé à : Envoyé pour la commande {order.Id} ";
+
+			await _emailSender.SendEmailAsync(order.AppUser.Email, $"Livraison de votre commande #{order.Id}",
+	$"Bonjour {order.Name} {order.SurName},\r\n\r\nNous vous informons que votre commande a été expédiée aujourd'hui.Voici le numéro de suivie de votre commande:\r\n\r\n{order.TrackingNumber}\r\nTransporteur : {order.Carrier}\r\nDate d'expédition : {order.ShippingDate}\r\n\r\nMerci d'avoir choisi notre application e-commerce pour vos achats en ligne. Nous espérons que vous apprécierez votre commande.\r\n\r\nCordialement,\r\nMille et une Création");
+
+			TempData["Success"] = $"statut passé à : Envoyé pour la commande {order.Id}";
 
 			return RedirectToPage("OrderIndex");
 		}
@@ -101,7 +109,7 @@ namespace ShoppingFantasy.Pages
 		public async Task<IActionResult> OnGetCancelOrder(int orderId)
 		{
 			var order = await _db.OrderHeaders.FindAsync(orderId);
-			if(order.PaymentStatus == SD.PaiementStatusApprouve)
+			if (order.PaymentStatus == SD.PaiementStatusApprouve)
 			{
 				var options = new RefundCreateOptions
 				{
@@ -113,7 +121,7 @@ namespace ShoppingFantasy.Pages
 				Refund refund = service.Create(options);
 
 				order.OrderStatus = SD.StatusRembourse;
-				if (OrderVM.OrderHeader.PaymentStatus != null)
+				if (order.PaymentStatus != null)
 				{
 					order.PaymentStatus = SD.StatusRembourse;
 				}
@@ -123,14 +131,14 @@ namespace ShoppingFantasy.Pages
 			{
 				order.OrderStatus = SD.StatusAnnule;
 				order.PaymentStatus = SD.StatusAnnule;
-				
+
 			}
 
 			_db.Update(order);
 			await _db.SaveChangesAsync();
 			TempData["Success"] = $"Statut  Annulé pour la commande {order.Id}";
 			return RedirectToPage("OrderIndex");
-				
+
 		}
 
 		private async Task UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
