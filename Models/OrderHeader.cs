@@ -28,10 +28,14 @@ namespace ShoppingFantasy.Models
         public bool FreeShipping { get; set; } = false;
 
         [DisplayName("Prix de la Livraison")]
-        public double? ShippingPrice { get; set; } = 6;
+		[Column(TypeName = "decimal(18,2)")]
+		[DataType(DataType.Currency)]
+		public decimal? ShippingPrice { get; set; } = 6;
 
         [DisplayName("Total de l'ordre")]
-        public double OrderTotal { get; set; }
+		[Column(TypeName = "decimal(18,2)")]
+		[DataType(DataType.Currency)]
+		public decimal OrderTotal { get; set; }
 
         [DisplayName("Statut de l'ordre")]
         public string? OrderStatus { get; set; }

@@ -8,37 +8,35 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
 
-namespace ShoppingFantasy.Pages.CrudProduct
+namespace ShoppingFantasy.Pages.CrudShippingService
 {
     public class CreateModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ShoppingFantasy.Data.ApplicationDbContext _context;
 
-        public CreateModel(ApplicationDbContext context)
+        public CreateModel(ShoppingFantasy.Data.ApplicationDbContext context)
         {
             _context = context;
         }
 
         public IActionResult OnGet()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return Page();
         }
 
         [BindProperty]
-        public Product Product { get; set; } = default!;
+        public ShippingService ShippingService { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-          if (!ModelState.IsValid || _context.Products == null || Product == null)
+          if (!ModelState.IsValid || _context.ShippingServices == null || ShippingService == null)
             {
-                ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
                 return Page();
             }
 
-            _context.Products.Add(Product);
+            _context.ShippingServices.Add(ShippingService);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

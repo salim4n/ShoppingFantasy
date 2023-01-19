@@ -28,7 +28,9 @@ namespace ShoppingFantasy.Models
         public int Count { get; set; }
 
         [DisplayName("Prix")]
-        public double Price { get; set; }
+		[Column(TypeName = "decimal(18,2)")]
+		[DataType(DataType.Currency)]
+		public decimal Price { get; set; }
 
     }
 }

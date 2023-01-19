@@ -99,7 +99,7 @@ namespace ShoppingFantasy.Pages
 			await _db.SaveChangesAsync();
 
 			await _emailSender.SendEmailAsync(order.AppUser.Email, $"Livraison de votre commande #{order.Id}",
-	$"Bonjour {order.Name} {order.SurName},\r\n\r\nNous vous informons que votre commande a été expédiée aujourd'hui.Voici le numéro de suivie de votre commande:\r\n\r\n{order.TrackingNumber}\r\nTransporteur : {order.Carrier}\r\nDate d'expédition : {order.ShippingDate}\r\n\r\nMerci d'avoir choisi notre application e-commerce pour vos achats en ligne. Nous espérons que vous apprécierez votre commande.\r\n\r\nCordialement,\r\nMille et une Création");
+	$"<!DOCTYPE html>\r\n<html>\r\n<head>\r\n    <title>Confirmation de livraison</title>\r\n</head>\r\n<body>\r\n    <h1>Confirmation de livraison</h1>\r\n    <p>Bonjour {order.Name} {order.SurName},</p>\r\n    <p>Nous avons le plaisir de vous informer que votre commande sur notre site Mille et une création a été expédiée aujourd'hui.</p>\r\n    <p>Vous pouvez suivre votre livraison en utilisant le numéro de suivi ci-dessous :</p>\r\n    <p>Numéro de suivi : <strong>{order.TrackingNumber}</strong></p>\r\n <p>Entreprise de livraison : <strong>{order.Carrier}</strong>\r\n    <p>Nous espérons que vous apprécierez votre achat et n'hésitez pas à nous contacter si vous avez des questions ou des commentaires.</p>\r\n    <p>Cordialement,</p>\r\n    <p>L'équipe Mille et une création</p>\r\n</body>\r\n</html>");
 
 			TempData["Success"] = $"statut passé à : Envoyé pour la commande {order.Id}";
 

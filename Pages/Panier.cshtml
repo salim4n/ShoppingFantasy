@@ -9,6 +9,7 @@
 @if (User.Identity.IsAuthenticated)
 {
 	<form method="post" >
+		<input asp-for="ShoppingCart" hidden />
 		<br />
 		<div class="container pt-4 pb-4">
 			<div class="card">

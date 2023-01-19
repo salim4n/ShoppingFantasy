@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
 
-namespace ShoppingFantasy.Pages.CrudPicture
+namespace ShoppingFantasy.Pages.CrudShippingService
 {
     public class EditModel : PageModel
     {
@@ -21,22 +21,21 @@ namespace ShoppingFantasy.Pages.CrudPicture
         }
 
         [BindProperty]
-        public Picture Picture { get; set; } = default!;
+        public ShippingService ShippingService { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.Pictures == null)
+            if (id == null || _context.ShippingServices == null)
             {
                 return NotFound();
             }
 
-            var picture =  await _context.Pictures.FirstOrDefaultAsync(m => m.Id == id);
-            if (picture == null)
+            var shippingservice =  await _context.ShippingServices.FirstOrDefaultAsync(m => m.Id == id);
+            if (shippingservice == null)
             {
                 return NotFound();
             }
-            Picture = picture;
-           ViewData["Article"] = new SelectList(_context.Products, "Id", "Name");
+            ShippingService = shippingservice;
             return Page();
         }
 
@@ -49,7 +48,7 @@ namespace ShoppingFantasy.Pages.CrudPicture
                 return Page();
             }
 
-            _context.Attach(Picture).State = EntityState.Modified;
+            _context.Attach(ShippingService).State = EntityState.Modified;
 
             try
             {
@@ -57,7 +56,7 @@ namespace ShoppingFantasy.Pages.CrudPicture
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!PictureExists(Picture.Id))
+                if (!ShippingServiceExists(ShippingService.Id))
                 {
                     return NotFound();
                 }
@@ -70,9 +69,9 @@ namespace ShoppingFantasy.Pages.CrudPicture
             return RedirectToPage("./Index");
         }
 
-        private bool PictureExists(int id)
+        private bool ShippingServiceExists(int id)
         {
-          return (_context.Pictures?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.ShippingServices?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

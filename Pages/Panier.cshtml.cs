@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using MimeKit.Cryptography;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
 using ShoppingFantasy.Utility;
@@ -22,7 +23,7 @@ namespace ShoppingFantasy.Pages
             _db = db;
         }
 
-        
+        [BindProperty]
         public ShoppingCartVM ShoppingCart { get; set; }
 
         public decimal ShippingPrice { get; } = SD.ShippingCost;
@@ -51,14 +52,14 @@ namespace ShoppingFantasy.Pages
                     cartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
                 }
 
-                if (cartVM.OrderHeader.OrderTotal > (double)SD.ShippingFreeCost)
+                if (cartVM.OrderHeader.OrderTotal > SD.ShippingFreeCost)
                 {
                     cartVM.OrderHeader.FreeShipping = true;
                 }
                 else
                 {
                     cartVM.OrderHeader.FreeShipping = false;
-                    cartVM.OrderHeader.OrderTotal += (double)SD.ShippingCost;
+                    cartVM.OrderHeader.OrderTotal += SD.ShippingCost;
                 }
 
                 ShoppingCart = cartVM;
@@ -91,7 +92,7 @@ namespace ShoppingFantasy.Pages
 		}
 
 
-		private double GetTotalPrice(ShoppingCart sp)
+		private decimal GetTotalPrice(ShoppingCart sp)
         {
             decimal productPrice;
 
@@ -99,7 +100,7 @@ namespace ShoppingFantasy.Pages
                 productPrice = sp.Product.PromoPrice;
             else
                 productPrice = sp.Product.Price;
-            return (double)productPrice;
+            return productPrice;
         }
 
 

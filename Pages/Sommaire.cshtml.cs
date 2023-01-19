@@ -48,11 +48,21 @@ namespace ShoppingFantasy.Pages
 			shoppingCart.OrderHeader.City = shoppingCart.OrderHeader.AppUser.City;
 			shoppingCart.OrderHeader.PostalCode = shoppingCart.OrderHeader.AppUser.PostalCode;
 			shoppingCart.OrderHeader.AddressComplement = shoppingCart.OrderHeader.AppUser.AddressComplement;
+			shoppingCart.OrderHeader.PhoneNumber = shoppingCart.OrderHeader.AppUser.PhoneNumber;
 
 			foreach (var cart in shoppingCart.ListCart)
 			{
 				cart.Price = GetTotalPrice(cart);
 				shoppingCart.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+			}
+			if (shoppingCart.OrderHeader.OrderTotal > SD.ShippingFreeCost)
+			{
+				shoppingCart.OrderHeader.FreeShipping = true;
+			}
+			else
+			{
+				shoppingCart.OrderHeader.FreeShipping = false;
+				shoppingCart.OrderHeader.OrderTotal += SD.ShippingCost;
 			}
 
 			ShoppingCartVM = shoppingCart;
@@ -79,6 +89,15 @@ namespace ShoppingFantasy.Pages
 			{
 				cart.Price = GetTotalPrice(cart);
 				shoppingCart.OrderHeader.OrderTotal += (cart.Price * cart.Count);
+			}
+			if (shoppingCart.OrderHeader.OrderTotal > SD.ShippingFreeCost)
+			{
+				shoppingCart.OrderHeader.FreeShipping = true;
+			}
+			else
+			{
+				shoppingCart.OrderHeader.FreeShipping = false;
+				shoppingCart.OrderHeader.OrderTotal += SD.ShippingCost;
 			}
 			AppUser applicationUser = await _db.AppUsers.FirstOrDefaultAsync(u => u.Id == claim.Value);
 
@@ -113,9 +132,24 @@ namespace ShoppingFantasy.Pages
 
 			//stripe session
 			var domain = "https://localhost:7138";
-			var options = new SessionCreateOptions
+			//var customer = new Customer()
+			//{
+			//	Email = shoppingCart.OrderHeader.AppUser.Email,
+			//	Phone = shoppingCart.OrderHeader.AppUser.PhoneNumber,
+			//	Address = new Address()
+			//	{
+			//		City = shoppingCart.OrderHeader.City,
+			//		Country = "France",
+			//		PostalCode = shoppingCart.OrderHeader.PostalCode,
+			//		Line1 = shoppingCart.OrderHeader.StreetAddress
+			//	},
+			//	Name = shoppingCart.OrderHeader.Name + " " + shoppingCart.OrderHeader.SurName,
+			//};
+
+			var options = new SessionCreateOptions()
 			{
 				PaymentMethodTypes = new List<string>
+
 				{
 					"card",
 				},
@@ -124,6 +158,7 @@ namespace ShoppingFantasy.Pages
 				Mode = "payment",
 				SuccessUrl = domain + $"/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
 				CancelUrl = domain + $"/Panier",
+				
 			};
 
 			foreach (var item in shoppingCart.ListCart)
@@ -159,7 +194,7 @@ namespace ShoppingFantasy.Pages
 			return new StatusCodeResult(303);
 		}
 
-		private double GetTotalPrice(ShoppingCart sp)
+		private decimal GetTotalPrice(ShoppingCart sp)
 		{
 			decimal productPrice;
 
@@ -167,7 +202,7 @@ namespace ShoppingFantasy.Pages
 				productPrice = sp.Product.PromoPrice;
 			else
 				productPrice = sp.Product.Price;
-			return (double)productPrice;
+			return productPrice;
 		}
 
     }

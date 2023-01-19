@@ -29,7 +29,8 @@ namespace ShoppingFantasy.Models
 
         [NotMapped]
         [DisplayName("Prix")]
-        public double Price { get; set; }
+		[DataType(DataType.Currency)]
+		public decimal Price { get; set; }
     }
 
     public class ShoppingCartConfiguration : IEntityTypeConfiguration<ShoppingCart>

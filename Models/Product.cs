@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingFantasy.Models
@@ -14,11 +15,13 @@ namespace ShoppingFantasy.Models
 
         [DisplayName("Prix")]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal Price { get; set; }
+		[DataType(DataType.Currency)]
+		public decimal Price { get; set; }
 
-        [DisplayName("Prix choc !")]
+        [DisplayName("Prix Promo")]
         [Column(TypeName = "decimal(18,2)")]
-        public decimal PromoPrice { get; set; }
+		[DataType(DataType.Currency)]
+		public decimal PromoPrice { get; set; }
 
         [DisplayName(" Promotion ?")]
         public bool IsInPromo { get; set; } = false;
