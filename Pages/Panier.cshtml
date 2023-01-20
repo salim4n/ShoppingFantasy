@@ -66,16 +66,11 @@
 								else
 								{
 									<span class="badge badge-dark text-info">Livraison Payante</span>
-
 									<br />
-									<span class="badge badge-dark text-info">Cout de livraison : @Model.ShippingPrice.ToString("c")</span>
-
-									<br />
-
 								}
 								<ul class="list-group unlisted">
 									<li class="list-group-item d-flex justify-content-between bg-light">
-										<span class="text-info"> Total </span>
+										<span class="text-info"> Valeur du Panier </span>
 										<strong class="text-info">@Model.ShoppingCart.OrderHeader.OrderTotal.ToString("c")</strong>
 									</li>
 								</ul>

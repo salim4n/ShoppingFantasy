@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
@@ -26,13 +27,15 @@ namespace ShoppingFantasy.Pages
 		[BindProperty]
 		public ShoppingCartVM ShoppingCartVM { get; set; } = default!;
 		public int OrderTotal { get; set; }
+		public List<ShippingService> Shipping { get; set; } = default!;
 
 		public async Task OnGetAsync()
         {
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-
+			var shipping = await _db.ShippingServices.ToListAsync();
+			Shipping = shipping;
 			var shoppingCart = new ShoppingCartVM()
 			{
 				ListCart = await _db.ShoppingCarts.Include(s => s.Product).Where(s => s.ApplicationUserId == claim.Value).ToListAsync(),
@@ -62,10 +65,11 @@ namespace ShoppingFantasy.Pages
 			else
 			{
 				shoppingCart.OrderHeader.FreeShipping = false;
-				shoppingCart.OrderHeader.OrderTotal += SD.ShippingCost;
 			}
 
-			ShoppingCartVM = shoppingCart;
+			Shipping = await _db.ShippingServices.ToListAsync();
+            ShoppingCartVM = shoppingCart;
+
 
 			
 		}
@@ -97,7 +101,6 @@ namespace ShoppingFantasy.Pages
 			else
 			{
 				shoppingCart.OrderHeader.FreeShipping = false;
-				shoppingCart.OrderHeader.OrderTotal += SD.ShippingCost;
 			}
 			AppUser applicationUser = await _db.AppUsers.FirstOrDefaultAsync(u => u.Id == claim.Value);
 
@@ -111,6 +114,7 @@ namespace ShoppingFantasy.Pages
 			shoppingCart.OrderHeader.AddressComplement = ShoppingCartVM.OrderHeader.AddressComplement;
 			shoppingCart.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.PostalCode;
 			shoppingCart.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.PhoneNumber;
+			shoppingCart.OrderHeader.Carrier = ShoppingCartVM.OrderHeader.Carrier;
 
 			await _db.OrderHeaders.AddAsync(shoppingCart.OrderHeader);
 			await _db.SaveChangesAsync();
@@ -132,20 +136,6 @@ namespace ShoppingFantasy.Pages
 
 			//stripe session
 			var domain = "https://localhost:7138";
-			//var customer = new Customer()
-			//{
-			//	Email = shoppingCart.OrderHeader.AppUser.Email,
-			//	Phone = shoppingCart.OrderHeader.AppUser.PhoneNumber,
-			//	Address = new Address()
-			//	{
-			//		City = shoppingCart.OrderHeader.City,
-			//		Country = "France",
-			//		PostalCode = shoppingCart.OrderHeader.PostalCode,
-			//		Line1 = shoppingCart.OrderHeader.StreetAddress
-			//	},
-			//	Name = shoppingCart.OrderHeader.Name + " " + shoppingCart.OrderHeader.SurName,
-			//};
-
 			var options = new SessionCreateOptions()
 			{
 				PaymentMethodTypes = new List<string>

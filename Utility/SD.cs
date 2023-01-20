@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingFantasy.Utility
 {
@@ -32,7 +34,10 @@ namespace ShoppingFantasy.Utility
 
 
         //livraison gratuite
+        [DataType(DataType.Currency)]
         public const decimal ShippingFreeCost = 25;
+
+        [DataType(DataType.Currency)]
         public const decimal ShippingCost = 5;
     }
 }

@@ -1,4 +1,5 @@
 
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -53,15 +54,10 @@ namespace ShoppingFantasy.Pages
                 }
 
                 if (cartVM.OrderHeader.OrderTotal > SD.ShippingFreeCost)
-                {
                     cartVM.OrderHeader.FreeShipping = true;
-                }
                 else
-                {
                     cartVM.OrderHeader.FreeShipping = false;
-                    cartVM.OrderHeader.OrderTotal += SD.ShippingCost;
-                }
-
+                
                 ShoppingCart = cartVM;
 
                 return Page();
