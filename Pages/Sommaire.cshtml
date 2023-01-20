@@ -8,7 +8,6 @@
 
 <form method="post">
 	<input type="hidden" id="order" value="@JsonConvert.SerializeObject(Model.ShoppingCartVM.OrderHeader.OrderTotal)" />
-	<input type="hidden" id="free" value="@JsonConvert.SerializeObject(Model.ShoppingCartVM.OrderHeader.FreeShipping)" />
 	<input type="hidden" id="shipping" value="@JsonConvert.SerializeObject(Model.Shipping)" />
 	<br />
 	<div class="container">
@@ -120,9 +119,9 @@
 									<li class="list-group-item d-flex justify-content-between">
 										<div>
 											<h6 class="my-0">@details.Product.Name</h6>
-											<small class="text-muted">Quantité : <strong class="text=secondary">@details.Count</strong></small>
+											<small class="text-muted">Quantité : <strong class="text-secondary">@details.Count</strong></small>
 										</div>
-										<span class="text-muted">@((details.Price * details.Count).ToString("c")) </span>
+										<span class="text-muted text-secondary">@((details.Price * details.Count).ToString("c")) </span>
 									</li>
 								}
 								<li class="list-group-item d-flex justify-content-between bg-light">
@@ -135,23 +134,37 @@
 							<h4 class="d-flex justify-content-between align-items-center mb-3">
 								<span class="text-info">Information de Livraison :</span>
 							</h4>
-							<ul class="list-group mb-3">
-								@foreach (var details in Model.Shipping)
-								{
-									<li class="list-group-item d-flex justify-content-between">
-										<div>
-											<h6 class="my-0">@details.Name</h6>
-										</div>
-										<span class="text-muted" id="price-shipping">@details.Price.ToString("c")</span>
-									</li>
-								}
-								<li class="list-group-item d-flex justify-content-between">
-									<span class="text-info">
-										<strong>
-										 Livraison offerte avec la poste à partir de  @SD.ShippingFreeCost.ToString("c") d'achat
-										</strong>
-								</span></li>
-							</ul>
+							<table class="table table-sm table-secondary table-hover ">
+								<thead>
+									<tr>
+										<th>
+											Nom
+										</th>
+										<th>
+											Livraison Gratuite
+										</th>
+										<th>
+											Prix de Livraison
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach (var item in Model.Shipping)
+									{
+										<tr>
+											<td class="text-dark">
+												 @item.Name
+											</td>
+											<td class="text-primary">
+												@item.FreeShippingAt.ToString("c")
+											</td>
+											<td class="text-dark">
+												@item.Price.ToString("c")
+											</td>
+										</tr>
+									}
+								</tbody>
+							</table>
 						</div>
 					</div>
 				</div>
@@ -181,22 +194,57 @@
 
 	<script defer>
 
-		window.addEventListener("load", function () {
+		//window.addEventListener("load", function () {
 			const orderTotal = JSON.parse(document.getElementById("order").value);
 			const shipping = JSON.parse(document.getElementById("shipping").value);
-			const free = JSON.parse(document.getElementById("free").value);
-			console.log(free)
 			console.table(shipping)
+			console.log(orderTotal)
 			const shippingServiceSelect = document.getElementById("shipping-service-select");
 			const totalPriceElement = document.getElementById("total-price");
-			shippingServiceSelect.addEventListener("change", updateTotalPrice);
 
-			function updateTotalPrice() {
-				const selectedShippingServiceId = shippingServiceSelect.value;
-				const selectedShippingService = shipping.find(service => service.Id == selectedShippingServiceId);
-				const totalPrice = parseFloat(orderTotal) + selectedShippingService.Price;
-				totalPriceElement.innerHTML = totalPrice.toFixed(2);
+			shippingServiceSelect.addEventListener("change", () => {
+			const selectedShippingServiceId = shippingServiceSelect.value;
+			const selectedShippingService = shipping.find(service => service.Id == selectedShippingServiceId);
+			const free = getFreeOrNot(selectedShippingService.IsFree, orderTotal, selectedShippingService.FreeShippingAt)
+			console.log(`la livraison est gratuite ? ${free}`);
+			const total = getTotalPrice(free, selectedShippingService.Price,orderTotal)
+			console.log(total)
+			const totalPrice = parseFloat(orderTotal) + selectedShippingService.Price;
+			totalPriceElement.innerHTML = total;
+			});
+
+			//function updateTotalPrice() {
+			//	const selectedShippingServiceId = shippingServiceSelect.value;
+			//	const selectedShippingService = shipping.find(service => service.Id == selectedShippingServiceId);
+			//	const free = getFreeOrNot(selectedShippingService.IsFree, orderTotal, selectedShippingService.FreeShippingAt)
+			//	console.log(`la livraison est gratuite ? ${free}`);
+			//	const totalPrice = parseFloat(orderTotal) + selectedShippingService.Price;
+			//	totalPriceElement.innerHTML = totalPrice.toFixed(2);
+			//}
+
+			function checkPrice(){
+				let free = getFreeOrNot(shipping.IsFree, orderTotal,shipping.FreeShippingAt);
+				//console.log(free);
+				const total = getTotalPrice(free,shipping.Price, orderTotal);
 			}
-		});	
+
+			function getFreeOrNot(isFree,cartPrice, shippingFreePrice)
+			{
+				if(cartPrice > shippingFreePrice){
+					isFree = true;
+				}
+				else{
+					isFree = false;
+				}
+				return isFree;
+			}
+
+			function getTotalPrice(isFree, shippingPrice, orderTotal){
+				if(!isFree){
+					 orderTotal = orderTotal + shippingPrice;
+				}
+				return orderTotal.toFixed(2);
+			}
+		//});	
 	</script>
 }
