@@ -13,5 +13,11 @@ namespace ShoppingFantasy.Models
 		[DataType(DataType.Currency)]
 		[DisplayName("Prix")]
 		public double Price { get; set; }
+
+		[DataType(DataType.Currency)]
+		[DisplayName("Prix de livraison gratuite")]
+		public double FreeShippingAt { get; set; }
+		public bool IsFree { get; set; } = false;
+
 	}
 }

@@ -1,13 +1,15 @@
 ﻿@page
 @model ShoppingFantasy.Pages.SommaireModel
 @using ShoppingFantasy.Utility
+@using Newtonsoft.Json
 @{
     ViewData["Title"] = "Sommaire";
 }
 
 <form method="post">
-	<input type="hidden" id="order-total" value="@Model.ShoppingCartVM.OrderHeader.OrderTotal" />
-	<input type="hidden" id="shipping" value="@Json.Serialize(Model.Shipping)" />
+	<input type="hidden" id="order" value="@JsonConvert.SerializeObject(Model.ShoppingCartVM.OrderHeader.OrderTotal)" />
+	<input type="hidden" id="free" value="@JsonConvert.SerializeObject(Model.ShoppingCartVM.OrderHeader.FreeShipping)" />
+	<input type="hidden" id="shipping" value="@JsonConvert.SerializeObject(Model.Shipping)" />
 	<br />
 	<div class="container">
 		<div class="card">
@@ -99,6 +101,7 @@
 								</div>
 								<div class="col-9">
 									<select asp-for="ShoppingCartVM.OrderHeader.Carrier" id="shipping-service-select" name="shipping-service-select" class="form-select">
+										<option>---Service de Livraison---</option>
 										@foreach (var shippingService in Model.Shipping)
 										 {
 											<option value="@shippingService.Id">@shippingService.Name</option>
@@ -123,9 +126,10 @@
 									</li>
 								}
 								<li class="list-group-item d-flex justify-content-between bg-light">
-									<small class="text-info">Total</small>
-									<strong class="text-info">@Model.ShoppingCartVM.OrderHeader.OrderTotal.ToString("c")</strong>
-									@*<strong class="text-info">Total de la commande : <span id="total-price"></span></strong>*@
+									@*<small class="text-info">Total</small>*@
+									@*<strong class="text-info">@Model.ShoppingCartVM.OrderHeader.OrderTotal.ToString("c")</strong>*@
+									<strong class="text-info">Total de la commande : <span id="total-price"></span><i class="bi bi-currency-euro"></i></strong>
+									<span id="free-ship"></span>
 								</li>
 							</ul>
 							<h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -144,7 +148,7 @@
 								<li class="list-group-item d-flex justify-content-between">
 									<span class="text-info">
 										<strong>
-										La livraison est offerte avec la poste si le panier est supérieur à @SD.ShippingFreeCost.ToString("c")
+										 Livraison offerte avec la poste à partir de  @SD.ShippingFreeCost.ToString("c") d'achat
 										</strong>
 								</span></li>
 							</ul>
@@ -175,19 +179,24 @@
 		await Html.RenderPartialAsync("_ValidationScriptsPartial");
 	}
 
-	<script>
-		const orderTotal = document.getElementById("order-total").value;
-		const shipping = JSON.parse(document.getElementById("shipping").value);
-    const shippingServiceSelect = document.getElementById("shipping-service-select");
-    const totalPriceElement = document.getElementById("total-price");
-    shippingServiceSelect.addEventListener("change", updateTotalPrice);
+	<script defer>
 
+		window.addEventListener("load", function () {
+			const orderTotal = JSON.parse(document.getElementById("order").value);
+			const shipping = JSON.parse(document.getElementById("shipping").value);
+			const free = JSON.parse(document.getElementById("free").value);
+			console.log(free)
+			console.table(shipping)
+			const shippingServiceSelect = document.getElementById("shipping-service-select");
+			const totalPriceElement = document.getElementById("total-price");
+			shippingServiceSelect.addEventListener("change", updateTotalPrice);
 
-    function updateTotalPrice() {
-        const selectedShippingServiceId = shippingServiceSelect.value;
-        const selectedShippingService = Model.Shipping.find(service => service.Id == selectedShippingServiceId);
-        const totalPrice = Model.OrderTotal + selectedShippingService.Price;
-        totalPriceElement.innerHTML = totalPrice;
-    }
-</script>
+			function updateTotalPrice() {
+				const selectedShippingServiceId = shippingServiceSelect.value;
+				const selectedShippingService = shipping.find(service => service.Id == selectedShippingServiceId);
+				const totalPrice = parseFloat(orderTotal) + selectedShippingService.Price;
+				totalPriceElement.innerHTML = totalPrice.toFixed(2);
+			}
+		});	
+	</script>
 }

@@ -24,6 +24,18 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ShippingService.Price)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShippingService.FreeShippingAt)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingService.FreeShippingAt)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShippingService.IsFree)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingService.IsFree)
+        </dd>
     </dl>
     
     <form method="post">
