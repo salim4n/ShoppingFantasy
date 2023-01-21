@@ -4,6 +4,7 @@
 @using Newtonsoft.Json
 @{
     ViewData["Title"] = "Sommaire";
+
 }
 
 <form method="post">
@@ -100,13 +101,42 @@
 								</div>
 								<div class="col-9">
 									<select asp-for="ShoppingCartVM.OrderHeader.Carrier" id="shipping-service-select" name="shipping-service-select" class="form-select">
-										<option>---Service de Livraison---</option>
+										<option disabled>---Service de Livraison---</option>
 										@foreach (var shippingService in Model.Shipping)
 										 {
 											<option value="@shippingService.Id">@shippingService.Name</option>
 										 }
 									</select>
 								</div>
+							</div>
+							<div class="row my-1">
+								<div>
+									<a asp-page-handler="Relay" asp-route-codePostal="@Model.ShoppingCartVM.OrderHeader.PostalCode" class="btn btn-sm btn-outline-info">Liste Point de Relais</a>
+								</div>
+								@if (Model.Points != null)
+								{
+									<table table-sm table-success table-hover>
+										<thead>
+											<tr>
+												<th>Nom</th>
+												<th>Adresse</th>
+												<th>Code postal</th>
+												<th>Ville</th>
+											</tr>
+										</thead>
+										<tbody>
+											@foreach (var point in Model.Points)
+											{
+												<tr>
+													<td>@point.Name</td>
+													<td>@point.Address</td>
+													<td>@point.ZipCode</td>
+													<td>@point.City</td>
+												</tr>
+											}
+										</tbody>
+									</table>
+								}
 							</div>
 						</div>
 						<div class="col-12 col-lg-5 offset-lg-1">
@@ -194,11 +224,8 @@
 
 	<script defer>
 
-		//window.addEventListener("load", function () {
 			const orderTotal = JSON.parse(document.getElementById("order").value);
 			const shipping = JSON.parse(document.getElementById("shipping").value);
-			console.table(shipping)
-			console.log(orderTotal)
 			const shippingServiceSelect = document.getElementById("shipping-service-select");
 			const totalPriceElement = document.getElementById("total-price");
 
@@ -206,27 +233,10 @@
 			const selectedShippingServiceId = shippingServiceSelect.value;
 			const selectedShippingService = shipping.find(service => service.Id == selectedShippingServiceId);
 			const free = getFreeOrNot(selectedShippingService.IsFree, orderTotal, selectedShippingService.FreeShippingAt)
-			console.log(`la livraison est gratuite ? ${free}`);
 			const total = getTotalPrice(free, selectedShippingService.Price,orderTotal)
-			console.log(total)
 			const totalPrice = parseFloat(orderTotal) + selectedShippingService.Price;
 			totalPriceElement.innerHTML = total;
 			});
-
-			//function updateTotalPrice() {
-			//	const selectedShippingServiceId = shippingServiceSelect.value;
-			//	const selectedShippingService = shipping.find(service => service.Id == selectedShippingServiceId);
-			//	const free = getFreeOrNot(selectedShippingService.IsFree, orderTotal, selectedShippingService.FreeShippingAt)
-			//	console.log(`la livraison est gratuite ? ${free}`);
-			//	const totalPrice = parseFloat(orderTotal) + selectedShippingService.Price;
-			//	totalPriceElement.innerHTML = totalPrice.toFixed(2);
-			//}
-
-			function checkPrice(){
-				let free = getFreeOrNot(shipping.IsFree, orderTotal,shipping.FreeShippingAt);
-				//console.log(free);
-				const total = getTotalPrice(free,shipping.Price, orderTotal);
-			}
 
 			function getFreeOrNot(isFree,cartPrice, shippingFreePrice)
 			{
@@ -245,6 +255,6 @@
 				}
 				return orderTotal.toFixed(2);
 			}
-		//});	
+
 	</script>
 }

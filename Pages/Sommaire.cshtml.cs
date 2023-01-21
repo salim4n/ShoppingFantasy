@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
 using ShoppingFantasy.Utility;
@@ -11,6 +12,9 @@ using Stripe;
 using Stripe.Checkout;
 using System.Collections.Generic;
 using System.Security.Claims;
+using RestSharp;
+using Microsoft.CodeAnalysis.Elfie.Serialization;
+using System.Xml.Linq;
 
 namespace ShoppingFantasy.Pages
 {
@@ -19,7 +23,7 @@ namespace ShoppingFantasy.Pages
     {
         private readonly ApplicationDbContext _db;
 
-		public SommaireModel(ApplicationDbContext db)
+		public SommaireModel(ApplicationDbContext db )
 		{
 			_db = db;
 		}
@@ -71,6 +75,55 @@ namespace ShoppingFantasy.Pages
             ShoppingCartVM = shoppingCart;
 
 
+			
+		}
+
+		private string _apiKey = "3ZQLoDMm";
+		private string _url = "https://api.mondialrelay.com/WebService/Relais.asmx/ListeDesRelais";
+
+		[BindProperty(SupportsGet = true)]
+		public string ZipCode { get; set; }
+		public List<Point> Points { get; set; }
+
+		public void OnGetRelay(string codePostal)
+		{
+			var client = new RestClient("https://api.mondialrelay.com/WebService/Relais.asmx/ListeDesRelais");
+			RestRequest request = new RestRequest();
+			request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+			request.AddParameter("Enseigne", "CC22O9MK", ParameterType.GetOrPost);
+			request.AddParameter("Pays", "FR", ParameterType.GetOrPost);
+			request.AddParameter("CP", codePostal, ParameterType.GetOrPost);
+			request.AddParameter("Security", _apiKey, ParameterType.GetOrPost);
+			request.AddParameter("mode", "1"); // 1 pour recherche par code postal
+
+			var response = client.Execute(request);
+
+			if (response.IsSuccessful)
+			{
+				// parse the json response and map it to your model
+				var xmlDoc = XDocument.Parse(response.Content);
+				var relays = xmlDoc.Descendants("Relay")
+									.Select(relay => new Relay
+									{
+										RelayNumber = relay.Element("Num").Value,
+										CompanyName = relay.Element("LgAdr1").Value,
+										Address = relay.Element("LgAdr3").Value,
+										ZipCode = relay.Element("CP").Value,
+										City = relay.Element("Ville").Value,
+										Country = relay.Element("Pays").Value,
+										Latitude = relay.Element("Latitude").Value,
+										Longitude = relay.Element("Longitude").Value,
+									}).ToList();
+
+				// Parse JSON using your preferred library, 
+				// and map the resulting object to your model
+			}
+			else
+			{
+				// handle errors
+				var error = response.ErrorMessage;
+				//log the error
+			}
 			
 		}
 
