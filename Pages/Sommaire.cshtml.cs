@@ -81,7 +81,8 @@ namespace ShoppingFantasy.Pages
 
 		public async Task<IActionResult> OnPostAsync()
 		{
-			var lol = Request.Form["ParcelShopCode"];
+			var relaisId = Request.Form["ParcelShopCode"];
+			var relais = Request.Form["relais"];
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 

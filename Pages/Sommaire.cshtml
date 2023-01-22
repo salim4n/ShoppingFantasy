@@ -102,18 +102,18 @@
 									<select asp-for="ShoppingCartVM.OrderHeader.Carrier" id="shipping-service-select" name="shipping-service-select" class="form-select">
 										<option disabled>---Service de Livraison---</option>
 										@foreach (var shippingService in Model.Shipping)
-										 {
+										{
 											<option value="@shippingService.Id">@shippingService.Name</option>
-										 }
+										}
 									</select>
 								</div>
 							</div>
 							<div class="row my-1">
-									<!-- Widget -->
-									<div class="col-12" id="Zone_Widget"></div>
-									<!-- Parcelshop code -->
-								<input id="ParcelShopCode" name="ParcelShopCode" asp-for="@Model.Relais" hidden />
-								<a asp-asp-page-handler="Relais" class="btn btn-info btn-sm"> Valider le point de relais</a>
+								<!-- Widget -->
+								<div class="col-12" id="Zone_Widget"></div>
+								<!-- Parcelshop code -->
+								<input id="ParcelShopCode" name="ParcelShopCode" hidden />
+								<textarea id="relais" name="relais" hidden ></textarea>
 							</div>
 						</div>
 						<div class="col-12 col-lg-5 offset-lg-1">
@@ -132,64 +132,79 @@
 									</li>
 								}
 								<li class="list-group-item d-flex justify-content-between bg-light">
-									@*<small class="text-info">Total</small>*@
-									@*<strong class="text-info">@Model.ShoppingCartVM.OrderHeader.OrderTotal.ToString("c")</strong>*@
-									<strong class="text-info">Total de la commande : <span id="total-price"></span><i class="bi bi-currency-euro"></i></strong>
-									<span id="free-ship"></span>
+									<span id="free-ship" class="badge bg-info text-light"></span>
+								</li>
+								<li class="list-group-item d-flex justify-content-between bg-light">
+									<div class="input-group mb-3">
+										<span class="input-group-text font-weight-bold text-info">Totale la Commande : </span>
+										<input id="total-price"  class="form-control" aria-label="Amount (to the nearest euro)" readonly>
+										<span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
+									</div>
 								</li>
 							</ul>
-							<h4 class="d-flex justify-content-between align-items-center mb-3">
-								<span class="text-info">Information de Livraison :</span>
-							</h4>
-							<table class="table table-sm table-secondary table-hover ">
-								<thead>
-									<tr>
-										<th>
-											Nom
-										</th>
-										<th>
-											Livraison Gratuite
-										</th>
-										<th>
-											Prix de Livraison
-										</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach (var item in Model.Shipping)
-									{
-										<tr>
-											<td class="text-dark">
-												 @item.Name
-											</td>
-											<td class="text-primary">
-												@item.FreeShippingAt.ToString("c")
-											</td>
-											<td class="text-dark">
-												@item.Price.ToString("c")
-											</td>
-										</tr>
-									}
-								</tbody>
-							</table>
+							<div class="accordion" id="accordionExample">
+								<div class="accordion-item">
+									<h2 class="accordion-header" id="headingOne">
+										<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+												<span class="text-info">Information de Livraison</span>
+										</button>
+									</h2>
+									<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+										<div class="accordion-body">
+											<table class="table table-sm table-secondary table-hover ">
+												<thead>
+													<tr>
+														<th>
+															Nom
+														</th>
+														<th>
+															Livraison Gratuite
+														</th>
+														<th>
+															Prix de Livraison
+														</th>
+													</tr>
+												</thead>
+												<tbody>
+													@foreach (var item in Model.Shipping)
+													{
+														<tr>
+															<td class="text-dark">
+																@item.Name
+															</td>
+															<td class="text-primary">
+																@item.FreeShippingAt.ToString("c")
+															</td>
+															<td class="text-dark">
+																@item.Price.ToString("c")
+															</td>
+														</tr>
+													}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
 					</div>
 				</div>
-			</div>
-			<div class="card-footer">
-				<div class="row">
-					<div class="col-12 col-md-8 pt-2">
-						<p style="color:maroon; font-size:14px;">
-							Estimation date du colis chez vous :
-							@DateTime.Now.AddDays(3).ToShortDateString() - @DateTime.Now.AddDays(7).ToShortDateString()
-						</p>
-					</div>
-					<div class="col-12 col-md-4">
-						<button type="submit" id="submit-button"  class="btn btn-success form-control">Payer</button>
+				<div class="card-footer">
+					<div class="row">
+						<div class="col-12 col-md-8 pt-2">
+							<p style="color:maroon; font-size:14px;">
+								Estimation date du colis chez vous :
+								@DateTime.Now.AddDays(3).ToShortDateString() - @DateTime.Now.AddDays(7).ToShortDateString()
+							</p>
+						</div>
+						<div class="col-12 col-md-4">
+							<button type="submit" id="submit-button" class="btn btn-success form-control">Payer</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
 </form>
 
 
@@ -204,6 +219,7 @@
 			const shipping = JSON.parse(document.getElementById("shipping").value);
 			const shippingServiceSelect = document.getElementById("shipping-service-select");
 			const totalPriceElement = document.getElementById("total-price");
+			const freeShip = document.getElementById("free-ship");
 
 			shippingServiceSelect.addEventListener("change", () => {
 			const selectedShippingServiceId = shippingServiceSelect.value;
@@ -211,17 +227,26 @@
 			const free = getFreeOrNot(selectedShippingService.IsFree, orderTotal, selectedShippingService.FreeShippingAt)
 			const total = getTotalPrice(free, selectedShippingService.Price,orderTotal)
 			const totalPrice = parseFloat(orderTotal) + selectedShippingService.Price;
-			totalPriceElement.innerHTML = total;
+			totalPriceElement.value = total;
+			freeShip.innerHTML = checkFree(free);
 			});
 
-			const data = document.getElementById("ParcelShopCode");
-			data.addEventListener("change", (data) => {
-				console.table(data);
-			});
-
+			function checkFree(isFree){
+				
+				if(isFree){
+					const textFree = 'livraison gratuite';
+					return textFree;
+				}
+				else 
+				{
+				const textPaid = 'livraison payante';
+				return textPaid;
+				}
+				
+			}
 			function getFreeOrNot(isFree,cartPrice, shippingFreePrice)
 			{
-				if(cartPrice > shippingFreePrice){
+				if(cartPrice >= shippingFreePrice){
 					isFree = true;
 				}
 				else{
@@ -229,7 +254,6 @@
 				}
 				return isFree;
 			}
-
 			function getTotalPrice(isFree, shippingPrice, orderTotal){
 				if(!isFree){
 					 orderTotal = orderTotal + shippingPrice;
@@ -246,6 +270,7 @@
 			// et renverra le Point Relais sélectionné par l'utilisateur dans le champs d'ID "Retour_Widget"
 			$("#Zone_Widget").MR_ParcelShopPicker({
 				Target: "#ParcelShopCode", // Selecteur JQuery de l'élément dans lequel sera renvoyé l'ID du Point Relais sélectionné (généralement un champ input hidden)
+				TargetDisplayInfoPR : "#relais",
 				Brand: "CC22O9MK", // Votre code client Mondial Relay
 				Country: "FR", // Code ISO 2 lettres du pays utilisé pour la recherche,
 				// Habiller le widget aux couleurs Mondial Relay (thème par défaut si ce paramètre n'est pas renseigné)
