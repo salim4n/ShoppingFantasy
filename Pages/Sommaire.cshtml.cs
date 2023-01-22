@@ -7,6 +7,7 @@ using ShoppingFantasy.Models;
 using ShoppingFantasy.Utility;
 using ShoppingFantasy.ViewModels;
 using Stripe.Checkout;
+using System.Globalization;
 using System.Security.Claims;
 
 namespace ShoppingFantasy.Pages
@@ -85,8 +86,9 @@ namespace ShoppingFantasy.Pages
 				TempData["Error"] = "Vous devez chosir un mode de livraison !";
 				return RedirectToPage("Sommaire");
 			}
-
-			totalPrice.Replace(".", ",");
+			CultureInfo culture = new CultureInfo("en-US");
+			decimal decimalPrice = Convert.ToDecimal(totalPrice, culture);
+			
 
 
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -101,20 +103,7 @@ namespace ShoppingFantasy.Pages
 
 			shoppingCart.OrderHeader.OrderDate = DateTime.Now;
 			shoppingCart.OrderHeader.AppUserId = claim.Value;
-			shoppingCart.OrderHeader.OrderTotal = Convert.ToDecimal(totalPrice);
-			foreach (var cart in shoppingCart.ListCart)
-			{
-				cart.Price = GetTotalPrice(cart);
-				shoppingCart.OrderHeader.OrderTotal += (cart.Price * cart.Count);
-			}
-			if (shoppingCart.OrderHeader.OrderTotal >= SD.ShippingFreeCost)
-			{
-				shoppingCart.OrderHeader.FreeShipping = true;
-			}
-			else
-			{
-				shoppingCart.OrderHeader.FreeShipping = false;
-			}
+			shoppingCart.OrderHeader.OrderTotal = decimalPrice;
 			AppUser applicationUser = await _db.AppUsers.FirstOrDefaultAsync(u => u.Id == claim.Value);
 
 			shoppingCart.OrderHeader.PaymentStatus = SD.PaiementStatusAttente;
