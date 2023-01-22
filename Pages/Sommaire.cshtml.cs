@@ -1,29 +1,22 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using Microsoft.IdentityModel.Tokens;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
 using ShoppingFantasy.Utility;
 using ShoppingFantasy.ViewModels;
-using Stripe;
 using Stripe.Checkout;
-using System.Collections.Generic;
 using System.Security.Claims;
-using RestSharp;
-using Microsoft.CodeAnalysis.Elfie.Serialization;
-using System.Xml.Linq;
 
 namespace ShoppingFantasy.Pages
 {
 	[BindProperties]
 	public class SommaireModel : PageModel
-    {
-        private readonly ApplicationDbContext _db;
+	{
+		private readonly ApplicationDbContext _db;
 
-		public SommaireModel(ApplicationDbContext db )
+		public SommaireModel(ApplicationDbContext db)
 		{
 			_db = db;
 		}
@@ -34,7 +27,7 @@ namespace ShoppingFantasy.Pages
 		public List<ShippingService> Shipping { get; set; } = default!;
 
 		public async Task OnGetAsync()
-        {
+		{
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -72,17 +65,30 @@ namespace ShoppingFantasy.Pages
 			}
 
 			Shipping = await _db.ShippingServices.ToListAsync();
-            ShoppingCartVM = shoppingCart;
+			ShoppingCartVM = shoppingCart;
 
 		}
 
-		
-		public string Relais { get; set; }
+
+
 
 		public async Task<IActionResult> OnPostAsync()
 		{
+			string totalPrice;
+
+
 			var relaisId = Request.Form["ParcelShopCode"];
 			var relais = Request.Form["relais"];
+			totalPrice = (Request.Form["total-price"]);
+			if (totalPrice.IsNullOrEmpty())
+			{
+				TempData["Error"] = "Vous devez chosir un mode de livraison !";
+				return RedirectToPage("Sommaire");
+			}
+
+			totalPrice.Replace(".", ",");
+
+
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
@@ -92,16 +98,16 @@ namespace ShoppingFantasy.Pages
 				OrderHeader = new()
 			};
 
-			
+
 			shoppingCart.OrderHeader.OrderDate = DateTime.Now;
 			shoppingCart.OrderHeader.AppUserId = claim.Value;
-
+			shoppingCart.OrderHeader.OrderTotal = Convert.ToDecimal(totalPrice);
 			foreach (var cart in shoppingCart.ListCart)
 			{
 				cart.Price = GetTotalPrice(cart);
 				shoppingCart.OrderHeader.OrderTotal += (cart.Price * cart.Count);
 			}
-			if (shoppingCart.OrderHeader.OrderTotal > SD.ShippingFreeCost)
+			if (shoppingCart.OrderHeader.OrderTotal >= SD.ShippingFreeCost)
 			{
 				shoppingCart.OrderHeader.FreeShipping = true;
 			}
@@ -155,7 +161,7 @@ namespace ShoppingFantasy.Pages
 				Mode = "payment",
 				SuccessUrl = domain + $"/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
 				CancelUrl = domain + $"/Panier",
-				
+
 			};
 
 			foreach (var item in shoppingCart.ListCart)
@@ -202,5 +208,5 @@ namespace ShoppingFantasy.Pages
 			return productPrice;
 		}
 
-    }
+	}
 }

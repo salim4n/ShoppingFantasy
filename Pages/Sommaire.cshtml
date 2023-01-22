@@ -137,7 +137,7 @@
 								<li class="list-group-item d-flex justify-content-between bg-light">
 									<div class="input-group mb-3">
 										<span class="input-group-text font-weight-bold text-info">Totale la Commande : </span>
-										<input id="total-price"  class="form-control" aria-label="Amount (to the nearest euro)" readonly>
+										<input id="total-price" name="total-price"  class="form-control" aria-label="Amount (to the nearest euro)" readonly>
 										<span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
 									</div>
 								</li>
@@ -151,8 +151,8 @@
 									</h2>
 									<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 										<div class="accordion-body">
-											<table class="table table-sm table-secondary table-hover ">
-												<thead>
+											<table class="table table-sm  table-hover ">
+												<thead class="text-bg-primary">
 													<tr>
 														<th>
 															Nom
@@ -165,18 +165,20 @@
 														</th>
 													</tr>
 												</thead>
-												<tbody>
+												<tbody class="text-bg-secondary">
 													@foreach (var item in Model.Shipping)
 													{
 														<tr>
 															<td class="text-dark">
-																@item.Name
+																<span class="badge bg-info">@item.Name</span>
 															</td>
 															<td class="text-primary">
-																@item.FreeShippingAt.ToString("c")
+																<span class="badge bg-info">@item.FreeShippingAt.ToString("c")</span>
+																
 															</td>
 															<td class="text-dark">
-																@item.Price.ToString("c")
+																<span class="badge bg-info">@item.Price.ToString("c")</span>
+																
 															</td>
 														</tr>
 													}
