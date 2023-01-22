@@ -4,7 +4,6 @@
 @using Newtonsoft.Json
 @{
     ViewData["Title"] = "Sommaire";
-
 }
 
 <form method="post">
@@ -110,33 +109,11 @@
 								</div>
 							</div>
 							<div class="row my-1">
-								<div>
-									<a asp-page-handler="Relay" asp-route-codePostal="@Model.ShoppingCartVM.OrderHeader.PostalCode" class="btn btn-sm btn-outline-info">Liste Point de Relais</a>
-								</div>
-								@if (Model.Points != null)
-								{
-									<table table-sm table-success table-hover>
-										<thead>
-											<tr>
-												<th>Nom</th>
-												<th>Adresse</th>
-												<th>Code postal</th>
-												<th>Ville</th>
-											</tr>
-										</thead>
-										<tbody>
-											@foreach (var point in Model.Points)
-											{
-												<tr>
-													<td>@point.Name</td>
-													<td>@point.Address</td>
-													<td>@point.ZipCode</td>
-													<td>@point.City</td>
-												</tr>
-											}
-										</tbody>
-									</table>
-								}
+									<!-- Widget -->
+									<div class="col-12" id="Zone_Widget"></div>
+									<!-- Parcelshop code -->
+								<input id="ParcelShopCode" name="ParcelShopCode" asp-for="@Model.Relais" hidden />
+								<a asp-asp-page-handler="Relais" class="btn btn-info btn-sm"> Valider le point de relais</a>
 							</div>
 						</div>
 						<div class="col-12 col-lg-5 offset-lg-1">
@@ -195,7 +172,6 @@
 									}
 								</tbody>
 							</table>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -208,7 +184,7 @@
 						</p>
 					</div>
 					<div class="col-12 col-md-4">
-						<button type="submit"  class="btn btn-success form-control">Payer</button>
+						<button type="submit" id="submit-button"  class="btn btn-success form-control">Payer</button>
 					</div>
 				</div>
 			</div>
@@ -238,6 +214,11 @@
 			totalPriceElement.innerHTML = total;
 			});
 
+			const data = document.getElementById("ParcelShopCode");
+			data.addEventListener("change", (data) => {
+				console.table(data);
+			});
+
 			function getFreeOrNot(isFree,cartPrice, shippingFreePrice)
 			{
 				if(cartPrice > shippingFreePrice){
@@ -255,6 +236,23 @@
 				}
 				return orderTotal.toFixed(2);
 			}
+                                
 
 	</script>
+	<script>
+		$(document).ready(function () {
+			Responsive: true,
+			// Charge le widget dans la DIV d'id "Zone_Widget" avec les paramètres indiqués
+			// et renverra le Point Relais sélectionné par l'utilisateur dans le champs d'ID "Retour_Widget"
+			$("#Zone_Widget").MR_ParcelShopPicker({
+				Target: "#ParcelShopCode", // Selecteur JQuery de l'élément dans lequel sera renvoyé l'ID du Point Relais sélectionné (généralement un champ input hidden)
+				Brand: "CC22O9MK", // Votre code client Mondial Relay
+				Country: "FR", // Code ISO 2 lettres du pays utilisé pour la recherche,
+				// Habiller le widget aux couleurs Mondial Relay (thème par défaut si ce paramètre n'est pas renseigné)
+				Theme: "mondialrelay" // Mettre la valeur "inpost" (en minuscule) pour utiliser le thème graphique Inpost
+			});
+		});
+	</script>
+
 }
+
