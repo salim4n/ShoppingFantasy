@@ -99,8 +99,8 @@
 									<label>Mode de livraison</label>
 								</div>
 								<div class="col-9">
-									<select asp-for="ShoppingCartVM.OrderHeader.Carrier" id="shipping-service-select" name="shipping-service-select" class="form-select">
-										<option disabled>---Service de Livraison---</option>
+									<select asp-for="ShoppingCartVM.OrderHeader.Carrier" id="shipping-service-select" name="shipping-service-select" class="form-select" >
+										<option selected disabled>---Service de Livraison---</option>
 										@foreach (var shippingService in Model.Shipping)
 										{
 											<option value="@shippingService.Id">@shippingService.Name</option>
@@ -108,7 +108,7 @@
 									</select>
 								</div>
 							</div>
-							<div class="row my-1">
+							<div class="row my-1" id="widget-zone">
 								<!-- Widget -->
 								<div class="col-12" id="Zone_Widget"></div>
 								<!-- Parcelshop code -->
@@ -265,6 +265,9 @@
 	</script>
 	<script>
 		$(document).ready(function () {
+			shippingServiceSelect.addEventListener("change", () => {
+			if (shippingServiceSelect.value == 7) {
+					$('#widget-zone').show();
 			Responsive: true,
 			// Charge le widget dans la DIV d'id "Zone_Widget" avec les paramètres indiqués
 			// et renverra le Point Relais sélectionné par l'utilisateur dans le champs d'ID "Retour_Widget"
@@ -276,6 +279,12 @@
 				// Habiller le widget aux couleurs Mondial Relay (thème par défaut si ce paramètre n'est pas renseigné)
 				Theme: "mondialrelay" // Mettre la valeur "inpost" (en minuscule) pour utiliser le thème graphique Inpost
 			});
+			}
+				else {
+					$('#widget-zone').hide();
+				}
+			})
+			
 		});
 	</script>
 
