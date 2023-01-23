@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ShoppingFantasy.Models
 {
@@ -17,6 +18,8 @@ namespace ShoppingFantasy.Models
 		[DataType(DataType.Currency)]
 		[DisplayName("Prix de livraison gratuite")]
 		public double FreeShippingAt { get; set; }
+
+		[NotMapped]
 		public bool IsFree { get; set; } = false;
 
 	}

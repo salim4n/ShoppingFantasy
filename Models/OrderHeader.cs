@@ -30,7 +30,7 @@ namespace ShoppingFantasy.Models
         [DisplayName("Prix de la Livraison")]
 		[Column(TypeName = "decimal(18,2)")]
 		[DataType(DataType.Currency)]
-		public decimal? ShippingPrice { get; set; } = 6;
+		public decimal? ShippingPrice { get; set; }
 
         [DisplayName("Total de l'ordre")]
 		[Column(TypeName = "decimal(18,2)")]
@@ -89,5 +89,6 @@ namespace ShoppingFantasy.Models
         [Required]
         [DisplayName("Prenom")]
         public string? SurName { get; set; }
+        public string? RelaisId { get; set; }
     }
 }

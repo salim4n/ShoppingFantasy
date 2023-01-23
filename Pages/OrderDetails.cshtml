@@ -1,6 +1,7 @@
 ﻿@page
 @model ShoppingFantasy.Pages.OrderDetailsModel
 @using ShoppingFantasy.Utility
+@using Newtonsoft.Json
 @{
     ViewData["Title"] = "Detail de l'ordre";
 }
@@ -26,7 +27,7 @@
 						<div class="col-12 col-lg-6 pb-4">
 							<div class="row">
 								<h4 class="d-flex justify-content-between align-items-center mb-3">
-									<span class="text-primary">Détails :</span>
+									<span class="text-info">Détails :</span>
 								</h4>
 							</div>
 							<div class="row my-1">
@@ -204,7 +205,7 @@
 						</div>
 						<div class="col-12 col-lg-5 offset-lg-1">
 							<h4 class="d-flex justify-content-between align-items-center mb-3">
-								<span class="text-primary">Sommaire</span>
+								<span class="text-info">Sommaire</span>
 							</h4>
 							<label class="btn btn-outline-primary form-control my-2">Order Status - @Model.OrderVM.OrderHeader.OrderStatus</label>
 
@@ -258,6 +259,14 @@
 									<a  asp-page-handler="CancelOrder"  asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-danger form-control my-1">Annuler</a>
 								}
 							}
+
+							@if (!String.IsNullOrEmpty(Model.OrderVM.OrderHeader.RelaisId))
+							{
+								<div class=" container text-bg-primary rounded">
+									<label><span class="badge text-bg-info"> Adresse de Livraison</span></label>
+									<strong>@Html.DisplayFor(modelItem => Model.OrderVM.OrderHeader.RelaisId)</strong>
+								</div>
+							}
 						</div>
 					</div>
 				</div>
@@ -269,6 +278,7 @@
 
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
+	<script src="//widget.mondialrelay.com/parcelshop-picker/jquery.plugin.mondialrelay.parcelshoppicker.min.js"></script>
 	<script>
 		function validateInput() 
 		{
@@ -285,4 +295,5 @@
 			return true;
 		}
 	</script>
+
 }

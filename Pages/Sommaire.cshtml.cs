@@ -76,11 +76,13 @@ namespace ShoppingFantasy.Pages
 		public async Task<IActionResult> OnPostAsync()
 		{
 			string totalPrice;
+			string message;
 
-
+			int shippingServiceId = Convert.ToInt32(Request.Form["shipping-service-select"]);
 			var relaisId = Request.Form["ParcelShopCode"];
 			var relais = Request.Form["relais"];
-			totalPrice = (Request.Form["total-price"]);
+			totalPrice = Request.Form["total-price"];
+
 			if (totalPrice.IsNullOrEmpty())
 			{
 				TempData["Error"] = "Vous devez chosir un mode de livraison !";
@@ -88,11 +90,11 @@ namespace ShoppingFantasy.Pages
 			}
 			CultureInfo culture = new CultureInfo("en-US");
 			decimal decimalPrice = Convert.ToDecimal(totalPrice, culture);
-			
-
 
 			var claimsIdentity = (ClaimsIdentity)User.Identity;
 			var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+			var shipping = await _db.FindAsync<ShippingService>(shippingServiceId);
+			shipping.IsFree = IsShippingFree(decimalPrice, (decimal)shipping.FreeShippingAt);
 
 			var shoppingCart = new ShoppingCartVM()
 			{
@@ -100,12 +102,14 @@ namespace ShoppingFantasy.Pages
 				OrderHeader = new()
 			};
 
-
+			if (!relaisId.IsNullOrEmpty())
+			{
+				shoppingCart.OrderHeader.RelaisId = relais;
+			}
 			shoppingCart.OrderHeader.OrderDate = DateTime.Now;
 			shoppingCart.OrderHeader.AppUserId = claim.Value;
 			shoppingCart.OrderHeader.OrderTotal = decimalPrice;
 			AppUser applicationUser = await _db.AppUsers.FirstOrDefaultAsync(u => u.Id == claim.Value);
-
 			shoppingCart.OrderHeader.PaymentStatus = SD.PaiementStatusAttente;
 			shoppingCart.OrderHeader.OrderStatus = SD.StatusAttente;
 			shoppingCart.OrderHeader.AppUserId = applicationUser.Id;
@@ -116,13 +120,30 @@ namespace ShoppingFantasy.Pages
 			shoppingCart.OrderHeader.AddressComplement = ShoppingCartVM.OrderHeader.AddressComplement;
 			shoppingCart.OrderHeader.PostalCode = ShoppingCartVM.OrderHeader.PostalCode;
 			shoppingCart.OrderHeader.PhoneNumber = ShoppingCartVM.OrderHeader.PhoneNumber;
-			shoppingCart.OrderHeader.Carrier = ShoppingCartVM.OrderHeader.Carrier;
+			shoppingCart.OrderHeader.Carrier = shipping.Name;
+			foreach (var cart in shoppingCart.ListCart)
+			{
+				cart.Price = GetTotalPrice(cart);
+
+			}
+			if (shipping.IsFree)
+			{
+				shoppingCart.OrderHeader.FreeShipping = true;
+			}
+			else
+			{
+				shoppingCart.OrderHeader.FreeShipping = false;
+				shoppingCart.OrderHeader.ShippingPrice = (decimal?)shipping.Price;
+
+			}
 
 			await _db.OrderHeaders.AddAsync(shoppingCart.OrderHeader);
+
 			await _db.SaveChangesAsync();
 
 			foreach (var cart in shoppingCart.ListCart)
 			{
+
 				OrderDetails orderDetails = new()
 				{
 					ProductId = cart.ProductId,
@@ -150,6 +171,8 @@ namespace ShoppingFantasy.Pages
 				Mode = "payment",
 				SuccessUrl = domain + $"/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
 				CancelUrl = domain + $"/Panier",
+				Currency = "eur",
+				CustomerEmail = applicationUser.Email,
 
 			};
 
@@ -165,13 +188,35 @@ namespace ShoppingFantasy.Pages
 						ProductData = new SessionLineItemPriceDataProductDataOptions
 						{
 							Name = item.Product.Name,
+							Images = (List<string>)item.Product.Picture,
 						},
 					},
 					Quantity = item.Count,
+
+
 				};
 
 				options.LineItems.Add(sessionLineItem);
 			}
+
+			if (!shipping.IsFree)
+			{
+				options.LineItems.Add(new SessionLineItemOptions
+				{
+					PriceData = new SessionLineItemPriceDataOptions
+					{
+						UnitAmount = (long)(shipping.Price * 100),
+						Currency = "eur",
+						ProductData = new SessionLineItemPriceDataProductDataOptions
+						{
+							Name = shipping.Name
+						},
+					},
+					Quantity = 1
+				});
+			}
+
+
 
 			var service = new SessionService();
 			Session session = service.Create(options);
@@ -196,6 +241,20 @@ namespace ShoppingFantasy.Pages
 				productPrice = sp.Product.Price;
 			return productPrice;
 		}
+
+		private bool IsShippingFree(decimal price, decimal freeAt)
+		{
+			if (price >= freeAt)
+				return true;
+			else
+				return false;
+		}
+
+		//private decimal? ShippingFee(ShoppingCart sp )
+		//{
+		//	sp.Price = GetTotalPrice(sp);
+		//	var check = IsShippingFree( sp.Price, freeAt );
+		//}
 
 	}
 }

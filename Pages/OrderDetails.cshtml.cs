@@ -7,6 +7,7 @@ using ShoppingFantasy.Utility;
 using ShoppingFantasy.ViewModels;
 using Stripe;
 using System.Text.Encodings.Web;
+using System.Text.RegularExpressions;
 
 namespace ShoppingFantasy.Pages
 {
@@ -33,6 +34,8 @@ namespace ShoppingFantasy.Pages
 				OrderDetails = await _db.OrderDetails.Include(oh => oh.Product).Where(oh => oh.OrderId == orderId).ToListAsync()
 			};
 
+			order.OrderHeader.RelaisId = StripHTML(order.OrderHeader.RelaisId);
+
 			OrderVM = order;
 			return Page();
 		}
@@ -51,8 +54,7 @@ namespace ShoppingFantasy.Pages
 				orderDb.City = OrderVM.OrderHeader.City;
 				orderDb.AddressComplement = OrderVM.OrderHeader.AddressComplement;
 				orderDb.PostalCode = OrderVM.OrderHeader.PostalCode;
-				//orderDb.TrackingNumber = OrderVM.OrderHeader.TrackingNumber;
-				//orderDb.Carrier = OrderVM.OrderHeader.Carrier;
+
 				if (OrderVM.OrderHeader.Carrier != null)
 				{
 					orderDb.Carrier = OrderVM.OrderHeader.Carrier;
@@ -152,6 +154,13 @@ namespace ShoppingFantasy.Pages
 					orderFromDb.PaymentStatus = paymentStatus;
 				}
 			}
+		}
+
+
+		//in love with this function !
+		private string StripHTML(string input)
+		{
+			return Regex.Replace(input, "<.*?>", " - ");
 		}
 	}
 }

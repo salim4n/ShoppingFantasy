@@ -33,7 +33,7 @@ namespace ShoppingFantasy.DbInitializer
 			}
 			catch (Exception ex)
 			{
-
+				
 			}
 
 			if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
