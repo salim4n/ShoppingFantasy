@@ -26,6 +26,19 @@ builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddRazorPages();
 
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = "1130810997579081";
+    options.AppSecret = "7884f795d0621be45c237cd0713f705";
+});
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login";
+    options.LogoutPath = $"/Identity/Account/Logout";
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
