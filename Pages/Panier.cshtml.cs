@@ -79,7 +79,7 @@ namespace ShoppingFantasy.Pages
         public async Task<IActionResult> OnGetRemove(int cartId)
 		{
 			// Retrieve the item in the cart
-			var item = _db.ShoppingCarts.FirstOrDefault(c => c.Id == cartId);
+			var item =  await _db.ShoppingCarts.FirstOrDefaultAsync(c => c.Id == cartId);
 
 			// Remove the item from the cart and update the database
 			_db.Remove(item);
@@ -87,8 +87,35 @@ namespace ShoppingFantasy.Pages
 			return RedirectToPage("Panier");
 		}
 
+        public async Task<IActionResult> OnGetPlus(int cartId)
+        {
+            var item =  await _db.ShoppingCarts.FirstOrDefaultAsync(c => c.Id == cartId);
+            item.Count++;
+            _db.Update(item);
+            await _db.SaveChangesAsync();
+            return RedirectToPage("Panier");
+        }
 
-		private decimal GetTotalPrice(ShoppingCart sp)
+        public async Task<IActionResult> OnGetMinus(int cartId)
+        {
+            var item = await _db.ShoppingCarts.FirstOrDefaultAsync(c => c.Id == cartId);
+            if (item.Count == 0 || item.Count == 1)
+            {
+                _db.Remove(item);
+            }
+            else 
+            { 
+                item.Count--;
+                _db.Update(item);
+                
+                
+            }
+			await _db.SaveChangesAsync();
+			return RedirectToPage("Panier");
+		}
+
+
+        private decimal GetTotalPrice(ShoppingCart sp)
         {
             decimal productPrice;
 

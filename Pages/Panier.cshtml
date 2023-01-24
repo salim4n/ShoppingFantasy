@@ -50,7 +50,13 @@
 									</div>
 
 									<div class="col-2 col-sm-4 col-lg-2 text-right pt-2">
-										<a asp-page-handler="Remove" asp-route-cartId="@item.Id" class="btn btn-danger">Supprimer</a>
+										<a asp-page-handler="Minus" asp-route-cartId="@item.Id" class="btn btn-danger "><i class="bi bi-dash-circle"></i></a>
+									</div>
+									<div class="col-2 col-sm-4 col-lg-2 text-right pt-2 pr-2 pl-2">
+										<a asp-page-handler="Remove" asp-route-cartId="@item.Id" class="btn btn-dark"><i class="bi bi-trash-fill"></i></a>
+									</div>
+									<div class="col-2 col-sm-4 col-lg-2 text-right pt-2">
+										<a asp-page-handler="Plus" asp-route-cartId="@item.Id" class="btn btn-success "><i class="bi bi-plus-circle"></i></a>
 									</div>
 								</div>
 							</div>

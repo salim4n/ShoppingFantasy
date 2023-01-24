@@ -15,8 +15,8 @@
 
     <input hidden id="order-info" value="@JsonConvert.SerializeObject(Model.OrderHeaders)" />
 
-    <table id="table" class= "table table-striped" style="width:100%">
-        <thead class=" text-bg-primary">
+    <table id="table" class="table table-hover table-striped rounded" style="width:100%">
+        <thead class=" text-bg-dark rounded">
              <tr>
                 <th>Id</th>
                 <th>Date</th>
@@ -44,7 +44,7 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js
 <script type="text/javascript" defer>
 
 $(document).ready( function () {
-
+             moment.locale("fr-FR");
             const data = JSON.parse(document.getElementById("order-info").value);
             data.map(d => d.OrderDate = moment(d.OrderDate).format('L'));
             data.map(d => d.OrderTotal = (d.OrderTotal).toLocaleString('fr-FR', {
@@ -53,16 +53,31 @@ $(document).ready( function () {
             }))
 
     $('#table').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.1/i18n/fr-FR.json"
+                },
                 data: data,
          "columns" : [
                 {data: "Id"},
-                { data: "OrderDate" },
+                {data: "OrderDate"},
                 {data: "Name"},
                 {data: "Carrier"},
                 {data: "PhoneNumber"},
                 {data: "AppUser.Email"},
                 {data: "OrderStatus"},
-                {data: "OrderTotal"}
+                {data: "OrderTotal"},
+                {"data": "Id",
+                "render": function (data) {
+                    return `
+                        <div class="w-75 btn-group" role="group">
+                        <a href="/OrderDetails?orderId=${data}"
+                        class="btn btn-info mx-2"> <i class="bi bi-pencil-square"></i></a>
+                      
+					</div>
+                        `
+                },
+                "width": "5%"
+            }
          ]
 
          
@@ -72,5 +87,6 @@ $(document).ready( function () {
 </script>
 
 }
+
 
 

@@ -33,8 +33,8 @@ namespace ShoppingFantasy.Pages
 				OrderHeader = await _db.OrderHeaders.Include(oh => oh.AppUser).FirstOrDefaultAsync(oh => oh.Id == orderId),
 				OrderDetails = await _db.OrderDetails.Include(oh => oh.Product).Where(oh => oh.OrderId == orderId).ToListAsync()
 			};
-
-			order.OrderHeader.RelaisId = StripHTML(order.OrderHeader.RelaisId);
+			if(order.OrderHeader.RelaisId != null)
+				order.OrderHeader.RelaisId = StripHTML(order.OrderHeader.RelaisId);
 
 			OrderVM = order;
 			return Page();
