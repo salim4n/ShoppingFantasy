@@ -11,45 +11,46 @@
 <form method="post">
     <input hidden asp-for="ShoppingCart.ProductId" />
 <div class="row">
-    
-    <div class="carousel-wrapper">
+
 
         <div class="carousel-wrapper">
-            <div class="media">
-                <div class="row media-img-wrapper d-flex justify-content-center">
-                    <div id="productCarousel-@Model.ShoppingCart.Product.Id" class="carousel slide w-50 carousel-black" data-bs-ride="carousel">
-                        <!-- Indicateurs -->
-                        <ol class="carousel-indicators">
-                            @foreach (var picture in Model.ShoppingCart.Product.Picture)
-                            {
-                                <li data-bs-target="#productCarousel-@Model.ShoppingCart.Product.Id" data-bs-slide-to="@Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture)" class="@(Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")"></li>
-                            }
-                        </ol>
-                        <!-- Diapositives -->
-                        <div class="carousel-inner">
-                            @foreach (var picture in Model.ShoppingCart.Product.Picture)
-                            {
-                                <div class="carousel-item @(Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")">
-                                    <img src="@picture.PictureUrl" alt="@Model.ShoppingCart.Product.Name" class="rounded shadow-lg mx-auto d-block w-100" style="height:500px;" />
-                                </div>
-                            }
+
+            <div class="carousel-wrapper">
+                <div class="media">
+                    <div class="row media-img-wrapper d-flex justify-content-center">
+                        <div id="productCarousel-@Model.ShoppingCart.Product.Id" class="carousel slide w-50 carousel-black" data-bs-ride="carousel">
+                            <!-- Indicateurs -->
+                            <ol class="carousel-indicators">
+                                @foreach (var picture in Model.ShoppingCart.Product.Picture)
+                                {
+                                    <li data-bs-target="#productCarousel-@Model.ShoppingCart.Product.Id" data-bs-slide-to="@Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture)" class="@(Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")"></li>
+                                }
+                            </ol>
+                            <!-- Diapositives -->
+                            <div class="carousel-inner">
+                                @foreach (var picture in Model.ShoppingCart.Product.Picture)
+                                {
+                                    <div class="carousel-item @(Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")">
+                                        <img src="@picture.PictureUrl" alt="@Model.ShoppingCart.Product.Name" class="rounded shadow-lg mx-auto d-block w-100" style="height:500px;" />
+                                    </div>
+                                }
+                            </div>
+                            <!-- Contrôles -->
+                            <a class="carousel-control-prev text-info" href="#productCarousel-@Model.ShoppingCart.Product.Id" role="button" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Précédent</span>
+                            </a>
+                            <a class="carousel-control-next text-info" href="#productCarousel-@Model.ShoppingCart.Product.Id" role="button" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Suivant</span>
+                            </a>
                         </div>
-                        <!-- Contrôles -->
-                        <a class="carousel-control-prev text-info" href="#productCarousel-@Model.ShoppingCart.Product.Id" role="button" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Précédent</span>
-                        </a>
-                        <a class="carousel-control-next text-info" href="#productCarousel-@Model.ShoppingCart.Product.Id" role="button" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Suivant</span>
-                        </a>
                     </div>
                 </div>
+
             </div>
 
         </div>
-
-    </div>
     
 </div>
 <div class="row mt-4">
@@ -101,15 +102,14 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
-
-        <script>
-            $(document).ready(function () {  
-            $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel();
-            }
-        
-                   
-        </script>
     }
+    
+
+    <script defer>
+        $(document).ready(function () {
+            $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel();
+        }
+    </script>
 }
 
 
