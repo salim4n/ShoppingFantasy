@@ -41,10 +41,13 @@
     <script src="
 https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js
 "></script>
+    <script src="
+https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/locale/fr.min.js
+"></script>
 <script type="text/javascript" defer>
 
-$(document).ready( function () {
-             moment.locale("fr-FR");
+$(document).ready(  function () {
+              
             const data = JSON.parse(document.getElementById("order-info").value);
             data.map(d => d.OrderDate = moment(d.OrderDate).format('L'));
             data.map(d => d.OrderTotal = (d.OrderTotal).toLocaleString('fr-FR', {
@@ -71,7 +74,7 @@ $(document).ready( function () {
                     return `
                         <div class="w-75 btn-group" role="group">
                         <a href="/OrderDetails?orderId=${data}"
-                        class="btn btn-info mx-2"> <i class="bi bi-pencil-square"></i></a>
+                                class="btn btn-info mx-2"> <i class="bi bi-eye-fill"></i></a>
                       
 					</div>
                         `
