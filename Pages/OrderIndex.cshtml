@@ -1,5 +1,6 @@
 ﻿@page
 @model ShoppingFantasy.Pages.OrderIndexModel
+@using Newtonsoft.Json
 @{
     ViewData["Title"] = "Mes Ordres";
 
@@ -11,61 +12,65 @@
     <div class="text-center pb-2">
         <h3 class="text-info">Mes Ordres</h3>
     </div>
-<table class="table table-sm table-secondary table-hover ">
-    <thead>
-        <tr>
-            <th>
-                Nom
-            </th>
-            <th>
-                Prenom
-            </th>
-            <th>
-                Telephone
-            </th>
-            <th>
-                E-Mail
-            </th>
-            <th>
-                Statut
-            </th>
-            <th>
-                Total
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.OrderHeaders)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.SurName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem =>item.AppUser.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderStatus)
-                </td>
 
-                <td>
-                    @*@Html.DisplayFor(modelItem => item.OrderTotal)*@
-                    @item.OrderTotal.ToString("c")
-                </td>
-                <td>
-                    <a asp-page="OrderDetails" asp-route-orderId="@item.Id" class="btn btn-sm btn-info"><i class="bi bi-eye-fill"></i></a>
-                </td>
+    <input hidden id="order-info" value="@JsonConvert.SerializeObject(Model.OrderHeaders)" />
+
+    <table id="table" class= "table table-striped" style="width:100%">
+        <thead class=" text-bg-primary">
+             <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Nom</th>
+                <th>Livraison</th>
+                <th>Telephone</th>
+                <th>E-mail</th>
+                <th>Statut</th>
+                <th>Total</th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+    </table>
 </div>
+
+
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+    <script src="
+https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js
+"></script>
+<script type="text/javascript" defer>
+
+$(document).ready( function () {
+
+            const data = JSON.parse(document.getElementById("order-info").value);
+            data.map(d => d.OrderDate = moment(d.OrderDate).format('L'));
+            data.map(d => d.OrderTotal = (d.OrderTotal).toLocaleString('fr-FR', {
+                style: 'currency',
+                currency: 'EUR'
+            }))
+
+    $('#table').DataTable({
+                data: data,
+         "columns" : [
+                {data: "Id"},
+                { data: "OrderDate" },
+                {data: "Name"},
+                {data: "Carrier"},
+                {data: "PhoneNumber"},
+                {data: "AppUser.Email"},
+                {data: "OrderStatus"},
+                {data: "OrderTotal"}
+         ]
+
+         
+    });
+} );
+
+</script>
+
+}
 
 

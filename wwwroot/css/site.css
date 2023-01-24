@@ -1,6 +1,6 @@
 html {
   font-size: 14px;
-  background-image : src("../images/mille_et_une_creation.png");
+  /*background :no-repeat center url("../images/mille_et_une_creation.png");*/
 }
 
 @media (min-width: 768px) {
