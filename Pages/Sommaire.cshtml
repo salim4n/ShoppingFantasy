@@ -128,11 +128,12 @@
 											<h6 class="my-0">@details.Product.Name</h6>
 											<small class="text-muted">Quantité : <strong class="text-secondary">@details.Count</strong></small>
 										</div>
-										<span class="text-muted text-secondary">@((details.Price * details.Count).ToString("c")) </span>
+										<span class=" text-success"><strong>@((details.Price * details.Count).ToString("c")) </strong></span>
 									</li>
 								}
 								<li class="list-group-item d-flex justify-content-between bg-light">
 									<span id="free-ship" class="badge bg-info text-light"></span>
+									<span id="ship-price" class="text-danger"></span>
 								</li>
 								<li class="list-group-item d-flex justify-content-between bg-light">
 									<div class="input-group mb-3">
@@ -149,7 +150,7 @@
 												<span class="text-info">Information de Livraison</span>
 										</button>
 									</h2>
-									<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+									<div id="collapseOne" class="accordion-collapse collapse hide" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
 										<div class="accordion-body">
 											<table class="table table-sm  table-hover ">
 												<thead class="text-bg-primary">
@@ -222,6 +223,7 @@
 			const shippingServiceSelect = document.getElementById("shipping-service-select");
 			const totalPriceElement = document.getElementById("total-price");
 			const freeShip = document.getElementById("free-ship");
+			const shipPrice = document.getElementById("ship-price");
 
 			shippingServiceSelect.addEventListener("change", () => {
 			const selectedShippingServiceId = shippingServiceSelect.value;
@@ -231,8 +233,15 @@
 			const totalPrice = parseFloat(orderTotal) + selectedShippingService.Price;
 			totalPriceElement.value = total;
 			freeShip.innerHTML = checkFree(free);
+			shipPrice.innerHTML = getShipPrice(selectedShippingService.Price, free);
 			});
 
+			function getShipPrice(priceShip, isFree){
+				if(!isFree){
+				const textPrice = `Frais de livraison : ${priceShip.toFixed(2)} &#128`;
+					return textPrice;
+				}
+			}
 			function checkFree(isFree){
 				
 				if(isFree){
