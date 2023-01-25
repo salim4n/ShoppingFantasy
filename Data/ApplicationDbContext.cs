@@ -20,6 +20,7 @@ namespace ShoppingFantasy.Data
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
         public DbSet<ShippingService> ShippingServices { get; set; }
+        public DbSet<ContactUs> ContactUs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

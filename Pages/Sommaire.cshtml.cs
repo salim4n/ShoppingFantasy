@@ -56,14 +56,7 @@ namespace ShoppingFantasy.Pages
 				cart.Price = GetTotalPrice(cart);
 				shoppingCart.OrderHeader.OrderTotal += (cart.Price * cart.Count);
 			}
-			if (shoppingCart.OrderHeader.OrderTotal > SD.ShippingFreeCost)
-			{
-				shoppingCart.OrderHeader.FreeShipping = true;
-			}
-			else
-			{
-				shoppingCart.OrderHeader.FreeShipping = false;
-			}
+			
 
 			Shipping = await _db.ShippingServices.ToListAsync();
 			ShoppingCartVM = shoppingCart;

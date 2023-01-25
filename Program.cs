@@ -16,7 +16,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("StripeSettings"));
-builder.Services.Configure<MondialRelay>(builder.Configuration.GetSection("MondialRelaySettings"));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();

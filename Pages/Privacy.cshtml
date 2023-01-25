@@ -5,14 +5,64 @@
 }
 <h1 class="pt-4 pb-4">@ViewData["Title"]</h1>
 
-<p>
-Virginie, c'est ici que tu vas afficher tes informations de contact, tu pourras aller a ton panneau d'administraition pour editer cette page. 
-</p>
-<br />
-<p>
- Tu auras un editeur de texte complet pour gerer l'affichage.
-</p>
-<br />
-<p>
- Normalement ici tu met ton SIREN, tes informations de contact et un petit resume sur ta boutique.
-</p>
+
+
+<div class="row align-content-center">
+
+
+    @if (User.IsInRole("Admin"))
+    {
+
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+             <h2 class="accordion-header" id="headingOne">
+      <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+       Editer la page
+      </button>
+    </h2>
+    <div id="collapseOne" class="accordion-collapse collapse hide" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+                        <form method="post">
+                            <div class="form-group">
+                                <label asp-for="Contact.Message" class="control-label"></label>
+                                <textarea asp-for="Contact.Message" class="form-control"> 
+                     </textarea>
+                                <span asp-validation-for="Contact.Message" class="text-danger"></span>
+                            </div>
+                            <div class="pt-2 pb-4">
+                                <button type="submit" class="btn btn-success">Valider</button>
+                            </div>
+                        </form>
+      </div>
+    </div>
+    </div>
+    </div>
+
+
+         
+    }
+
+<div class="col-sm-12 col-md-12 col-lg-12">
+    <article class="card bg-light rounded">
+    <p>
+       @Html.Raw(Model.Contact.Message)
+    </p>
+    </article>
+</div>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+        <script>
+            tinymce.init({
+                selector: 'textarea',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
+        </script>
+}
+

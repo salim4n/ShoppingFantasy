@@ -42,25 +42,47 @@ namespace ShoppingFantasy.DbInitializer
 				_roleManager.CreateAsync(new IdentityRole(SD.Role_Client)).GetAwaiter().GetResult();
 				_roleManager.CreateAsync(new IdentityRole(SD.Role_Pro)).GetAwaiter().GetResult();
 
+			}
+			if(_db.AppUsers.Count() < 1) {
+                _userManager.CreateAsync(new AppUser
+                {
+					
+                    UserName = "laimeche160@gmail.com",
+                    Email = "laimeche160@gmail.com",
+                    Name = "Salim Laimeche",
+                    PhoneNumber = "0749628470",
+                    Address = "je vit ici et la bas",
+                    PostalCode = "000000",
+                    City = "Los Santos"
+                }, "Admin123*").GetAwaiter().GetResult();
 
-				_userManager.CreateAsync(new AppUser
-				{
-					Name = "Admin",
-					Surname = "Salim",
-					Email = "salim4n@live.fr",
-					PhoneNumber = "0749628470",
-					Address = "mon addresse",
-					AddressComplement = "mon complément d'adresse",
-					PostalCode = "00000",
-					City = "Sin City",
-				}, "Admin123*").GetAwaiter().GetResult();
+                AppUser user = _db.AppUsers.FirstOrDefault(u => u.Email == "laimeche160@gmail.com");
 
-				AppUser user = _db.AppUsers.FirstOrDefault(u => u.Email == "salim4n@live.fr");
+                _userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
+            }
 
-				_userManager.AddToRoleAsync(user, SD.Role_Admin).GetAwaiter().GetResult();
+			if(_db.ContactUs.Count() < 1) 
+			{
+				ContactUs contactUs = new ContactUs();
+				_db.ContactUs.Add(contactUs);
+				_db.SaveChanges();
 			}
 
-			return;
+			if(_db.ShippingServices.Count() < 1)
+			{
+				ShippingService shippingService = new ShippingService()
+				{
+					Name = "Mondial Relay",
+					Price = 5,
+					FreeShippingAt = 30
+
+				};
+
+				_db.Add(shippingService);
+				_db.SaveChanges();
+			}
+
+			return; 
 		}
 
 		

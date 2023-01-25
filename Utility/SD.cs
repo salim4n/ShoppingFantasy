@@ -33,11 +33,5 @@ namespace ShoppingFantasy.Utility
         public const string SessionCart = "SessionShoppingCart";
 
 
-        //livraison gratuite
-        [DataType(DataType.Currency)]
-        public const decimal ShippingFreeCost = 25;
-
-        [DataType(DataType.Currency)]
-        public const decimal ShippingCost = 5;
     }
 }

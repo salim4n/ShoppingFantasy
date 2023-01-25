@@ -18,7 +18,7 @@
             
             <div class="media-body">
                     <h4 class="mb-0">@product.Name</h4>
-                <p>@product.Description</p>
+                <p>@Html.Raw(product.Description)</p>
                 <div class="flex-row px-4 pb-3">
                     @if (product.IsInPromo)
                     {

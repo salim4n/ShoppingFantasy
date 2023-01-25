@@ -70,7 +70,7 @@
             <h4 class="text-center">@Model.ShoppingCart.Product.Name</h4>
         </div>
         <div class="pt-3">
-            <p>@Model.ShoppingCart.Product.Description</p>
+            <p>@Html.Raw(Model.ShoppingCart.Product.Description)</p>
         </div>
         <div class="col-12 pb-3">
             <h4 class="text-info">Nombre</h4>

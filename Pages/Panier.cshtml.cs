@@ -27,7 +27,6 @@ namespace ShoppingFantasy.Pages
         [BindProperty]
         public ShoppingCartVM ShoppingCart { get; set; }
 
-        public decimal ShippingPrice { get; } = SD.ShippingCost;
 
         public async Task<IActionResult> OnGet()
         {
@@ -52,11 +51,6 @@ namespace ShoppingFantasy.Pages
                     cart.Price = GetTotalPrice(cart);
                     cartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
                 }
-
-                if (cartVM.OrderHeader.OrderTotal > SD.ShippingFreeCost)
-                    cartVM.OrderHeader.FreeShipping = true;
-                else
-                    cartVM.OrderHeader.FreeShipping = false;
                 
                 ShoppingCart = cartVM;
 
