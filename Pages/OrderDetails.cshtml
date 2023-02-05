@@ -242,13 +242,13 @@
 							{
 								if (Model.OrderVM.OrderHeader.OrderStatus == SD.StatusApprouve)
 								{
-									<a  asp-page-handler="StartProcessing" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-primary form-control my-1" >Préparer la commande</a>
+									<a  asp-page-handler="StartProcessing" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-success form-control my-1" >Préparer la commande</a>
 								}
 								if (Model.OrderVM.OrderHeader.OrderStatus == SD.StatusEnCours)
 								{
 
 									<a onclick="return validateInput()"
-							   asp-page-handler="ShipOrder" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-primary form-control my-1"> Envoyer</a>
+							   asp-page-handler="ShipOrder" asp-route-orderId="@Model.OrderVM.OrderHeader.Id" class="btn btn-info form-control my-1"> Envoyer</a>
 								}
 
 								@if (Model.OrderVM.OrderHeader.OrderStatus != SD.StatusRembourse &&
