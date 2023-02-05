@@ -1,10 +1,10 @@
-name: Générer et déployer une application .NET Core sur l'application web BulkyBookWeb20230201232021
+name: Générer et déployer une application .NET Core sur l'application web ShoppingFantasy20230205132818
 on:
   push:
     branches:
     - master
 env:
-  AZURE_WEBAPP_NAME: BulkyBookWeb20230201232021
+  AZURE_WEBAPP_NAME: ShoppingFantasy20230205132818
   AZURE_WEBAPP_PACKAGE_PATH: ./published
   CONFIGURATION: Release
   DOTNET_CORE_VERSION: 7.0.x
@@ -44,5 +44,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        publish-profile: ${{ secrets.BulkyBookWeb20230201232021_96E9 }}
+        publish-profile: ${{ secrets.ShoppingFantasy20230205132818_981C }}
         package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
