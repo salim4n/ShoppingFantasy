@@ -9,25 +9,25 @@
     @foreach (var product in Model.Category.Products)
     {
 
-        <li class="container bg-secondary oi-media-pause my-3 rounded hoverable">
+        <li class="container bg-secondary oi-media-pause my-3 rounded hoverable" style="display: flex;">
             <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#productModal-@product.Id">
             <div class="media-img-wrapper mr-2 pt-2 px-2">
                 <img class="media-img rounded" src="@product.Picture.FirstOrDefault().PictureUrl" alt="@product.Name" />
             </div>
             </button>
-            
-            <div class="media-body">
-                    <h4 class="mb-0">@product.Name</h4>
-                <p>@Html.Raw(product.Description)</p>
-                <div class="flex-row px-4 pb-3">
+
+            <div class="media-body text-center" style="display: flex;">
+                    <h4 class="mb-0 pt-3">@product.Name</h4>
+                
+                <div class="flex-row px-4 pb-3 pt-3">
                     @if (product.IsInPromo)
                     {
-                        <h5 class="price"><strike class="text-danger">@product.Price.ToString("c")</strike></h5>
-                        <h5 class="price"><strong class="text-success">@product.PromoPrice.ToString("c")</strong></h5>
+                        <h5 class="price"><strike class="text-danger">@product.Price <i class="bi bi-currency-euro"></i></strike></h5>
+                        <h5 class="price"><strong class="text-success">@product.PromoPrice <i class="bi bi-currency-euro"></i></strong></h5>
                     }
                     else
                     {
-                        <h5 class="price"><strong class="text-success">@product.Price.ToString("c")</strong></h5>
+                        <h5 class="price"><strong class="text-success">@product.Price <i class="bi bi-currency-euro"></i></strong></h5>
                     }
                     <a  asp-route-id="@product.Id" asp-page="/ProductDetails">
                     <button class="btn btn-info btn-sm"><i class="bi bi-eye-fill"></i> Details</button>

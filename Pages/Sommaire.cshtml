@@ -128,7 +128,7 @@
 											<h6 class="my-0">@details.Product.Name</h6>
 											<small class="text-muted">Quantité : <strong class="text-secondary">@details.Count</strong></small>
 										</div>
-										<span class=" text-success"><strong>@((details.Price * details.Count).ToString("c")) </strong></span>
+										<span class=" text-success"><strong>@(details.Price * details.Count) <i class="bi bi-currency-euro"></i></strong></span>
 									</li>
 								}
 								<li class="list-group-item d-flex justify-content-between bg-light">
@@ -137,7 +137,7 @@
 								</li>
 								<li class="list-group-item d-flex justify-content-between bg-light">
 									<div class="input-group mb-3">
-										<span class="input-group-text font-weight-bold text-info">Totale la Commande : </span>
+										<span class="input-group-text font-weight-bold text-info">Total: </span>
 										<input id="total-price" name="total-price"  class="form-control" aria-label="Amount (to the nearest euro)" readonly>
 										<span class="input-group-text"><i class="bi bi-currency-euro"></i></span>
 									</div>
@@ -174,11 +174,11 @@
 																<span class="badge bg-info">@item.Name</span>
 															</td>
 															<td class="text-primary">
-																<span class="badge bg-info">@item.FreeShippingAt.ToString("c")</span>
+																<span class="badge bg-info">@item.FreeShippingAt <i class="bi bi-currency-euro"></i></span>
 																
 															</td>
 															<td class="text-dark">
-																<span class="badge bg-info">@item.Price.ToString("c")</span>
+																<span class="badge bg-info">@item.Price <i class="bi bi-currency-euro"></i></span>
 																
 															</td>
 														</tr>

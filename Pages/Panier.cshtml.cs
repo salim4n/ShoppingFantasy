@@ -64,7 +64,7 @@ namespace ShoppingFantasy.Pages
             
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public  IActionResult OnPost()
         {
             return RedirectToPage("Sommaire");
         }

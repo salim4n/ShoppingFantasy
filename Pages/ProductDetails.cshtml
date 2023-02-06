@@ -5,151 +5,90 @@
 }
 
 
-<h1 class="text-center text-info title-product">@Model.ShoppingCart.Product.Name</h1>
+<h1 class="text-center text-info title-product pt-3">@Model.ShoppingCart.Product.Name</h1>
 
-
-<form method="post">
-    <input hidden asp-for="ShoppingCart.ProductId" />
-<div class="row">
-
-
-        <div class="carousel-wrapper">
-
-            <div class="carousel-wrapper">
-                <div class="media">
-                    <div class="row media-img-wrapper d-flex justify-content-center">
-                        <div id="productCarousel-@Model.ShoppingCart.Product.Id" class="carousel slide w-50 carousel-black" data-bs-ride="carousel">
-                            <!-- Indicateurs -->
-                            <ol class="carousel-indicators">
-                                @foreach (var picture in Model.ShoppingCart.Product.Picture)
-                                {
-                                    <li data-bs-target="#productCarousel-@Model.ShoppingCart.Product.Id" data-bs-slide-to="@Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture)" class="@(Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")"></li>
-                                }
-                            </ol>
-                            <!-- Diapositives -->
-                            <div class="carousel-inner">
-                                @foreach (var picture in Model.ShoppingCart.Product.Picture)
-                                {
-                                    <div class="carousel-item @(Model.ShoppingCart.Product.Picture.ToList().FindIndex(p => p == picture) == 0 ? "active" : "")">
-                                        <img src="@picture.PictureUrl" alt="@Model.ShoppingCart.Product.Name" class="rounded shadow-lg mx-auto d-block w-100" style="height:500px;" />
-                                    </div>
-                                }
-                            </div>
-                            <!-- Contrôles -->
-                            <a class="carousel-control-prev text-info" href="#productCarousel-@Model.ShoppingCart.Product.Id" role="button" data-bs-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Précédent</span>
-                            </a>
-                            <a class="carousel-control-next text-info" href="#productCarousel-@Model.ShoppingCart.Product.Id" role="button" data-bs-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Suivant</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
+        <div class="row">
+            <div class="col-md-6 colonne">
+               <section id="image-carousel" class="splide" aria-label="Beautiful Images">
+                 <div class="splide__track">
+                        <ul class="splide__list">
+                             @foreach(var pic in Model.ShoppingCart.Product.Picture)
+                             {
+                                     <li class="splide__slide">
+                                        <img src="@pic.PictureUrl" alt="@pic.FileName">
+                                     </li>
+                             }
+                        </ul>
+                 </div>
+              </section>
             </div>
+            <div class="col-md-6  ">
+                <!-- Placez votre contenu ici -->
+                    @if (Model.ShoppingCart.Product.IsInPromo)
+                    {
+                    <h5 class="price pt-3"><strike class="text-danger">@Model.ShoppingCart.Product.Price <i class="bi bi-currency-euro"></i></strike></h5>
+                    <h5 class="price"><strong class="text-success">@Model.ShoppingCart.Product.PromoPrice <i class="bi bi-currency-euro"></i></strong></h5>
+                    }
+                    else
+                    {
+                    <h5 class="price pt-3"><strong class="text-success">@Model.ShoppingCart.Product.Price <i class="bi bi-currency-euro"></strong></h5>
+                    }
+                 <form method="post">
+                        <input hidden asp-for="ShoppingCart.ProductId" />
+                 <div class="col-12 pb-3">
+                <h4 class="text-info">Nombre</h4>
+                <input asp-for="ShoppingCart.Count" class="form-control" asp-val-range="1, 1000" />
+                <span asp-validation-for="ShoppingCart.Count" class="text-danger" asp-val-range="1, 1000"></span>
+                </div>
+                <div class="col-12 pb-3">
+                    @if (User.Identity.IsAuthenticated)
+                    {
 
-        </div>
-       
-    
-</div>
-<div class="row mt-4">
-    <div class="col-sm-12 container bg-primary rounded product-info">
-        @if (Model.ShoppingCart.Product.IsInPromo)
-        {
-            <span class="badge bg-info p-badge">En Promotion !</span>
-            <h5 class="price pt-3"><strike class="text-warning">@Model.ShoppingCart.Product.Price.ToString("c")</strike></h5>
-            <h5 class="price"><strong class="text-success">@Model.ShoppingCart.Product.PromoPrice.ToString("c")</strong></h5>
-        }
-        else
-        {
-            <h5 class="price pt-3"><strong class="text-success">@Model.ShoppingCart.Product.Price.ToString("c")</strong></h5>
-        }
-        <!-- Les informations du produit vont ici -->
-        <div class="pt-3">
-            <h4 class="text-center">@Model.ShoppingCart.Product.Name</h4>
-        </div>
-        <div class="pt-3">
-            <p>@Html.Raw(Model.ShoppingCart.Product.Description)</p>
-        </div>
-        <div class="col-12 pb-3">
-            <h4 class="text-info">Nombre</h4>
-                <input asp-for="ShoppingCart.Count"  class="form-control" asp-val-range="1, 1000" />
-                <span asp-validation-for="ShoppingCart.Count" class="text-light" asp-val-range="1, 1000"></span>
-        </div>
-        <div class="col-12 pb-3">
-                @if (User.Identity.IsAuthenticated)
-                {
-                    
                     <button type="submit" value="ProductDetails" class="btn btn-success btn-sm"><i class="bi bi-cart"></i> Ajouter au panier</button>
-                    <a  asp-page="index" class="btn btn-outline-secondary btn-sm">Accueil</a>
+                    @if (Model.ShoppingCart.Product.IsInPromo)
+                    {
+                        <span class="badge bg-info ">En Promotion !</span>
+                    }
+
+                }
+                    else
+                    {
+
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-dark pb-2">Créer un compte</a>
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-dark">Se Connecter</a>
+
+                    }
                     
-                }
-                else
-                {
 
-                    <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-dark pb-2">Créer un compte</a>
-                    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-dark">Se Connecter</a>
-                   
-                }
-            
+                </div>
+                </form>
+            </div>
+            <article class="col-12 text-center ">
+                <p>@Html.Raw(Model.ShoppingCart.Product.Description)</p>
+            </article>
         </div>
-    </div>
-</div>
-</form>
-
-
 
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    
-    <script defer>
-        $(document).ready(function () {
-            $('#productCarousel-@Model.ShoppingCart.Product.Id').carousel();
-        }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            new Splide('#image-carousel', {
+                heightRatio: 0.5,
+            }).mount();
+        });
     </script>
 }
 
-
-
-
 <style>
-
-    .title-product {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        z-index: 10;
-    }
-
-    .p-badge {
-        z-index: 5;
-        border: 2px solid black;
-        box-shadow: 10px 5px 5px navy;
-        /*transform: scale(1.1) rotate(5deg);*/
-    }
-
-    .product-info:hover {
-        z-index: 10;
-        border: 2px solid black;
-        box-shadow: 10px 5px 5px black;
-    }
-
-    img:hover {
-        z-index: 10;
-        border: 2px solid black;
-        box-shadow: 10px 5px 5px black;
-    }
-
-    button:hover {
-        z-index: -10;
-        box-shadow: 10px 5px 5px darkgray;
-    }
-
-    .wrapper {
-
+    .splide__slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
 </style>
+
+
