@@ -9,6 +9,7 @@ using ShoppingFantasy.ViewModels;
 using Stripe.Checkout;
 using System.Globalization;
 using System.Security.Claims;
+using static System.Net.WebRequestMethods;
 
 namespace ShoppingFantasy.Pages
 {
@@ -162,8 +163,8 @@ namespace ShoppingFantasy.Pages
 				LineItems = new List<SessionLineItemOptions>()
 				,
 				Mode = "payment",
-				SuccessUrl = domain + $"/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
-				CancelUrl = domain + $"/Panier",
+				SuccessUrl = $"https://shoppingfantasy20230205132818.azurewebsites.net/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
+				CancelUrl = $"https://shoppingfantasy20230205132818.azurewebsites.net/Panier",
 				Currency = "eur",
 				CustomerEmail = applicationUser.Email,
 
