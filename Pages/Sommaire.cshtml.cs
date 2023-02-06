@@ -156,7 +156,6 @@ namespace ShoppingFantasy.Pages
 			var options = new SessionCreateOptions()
 			{
 				PaymentMethodTypes = new List<string>
-
 				{
 					"card",
 				},

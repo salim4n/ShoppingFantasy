@@ -241,6 +241,11 @@
 				const textPrice = `Frais de livraison : ${priceShip.toFixed(2)} &#128`;
 					return textPrice;
 				}
+				else
+				{
+					const freePrice = "Frais de livraison : Offert";
+					return freePrice;
+				}
 			}
 			function checkFree(isFree){
 				
@@ -301,3 +306,9 @@
 
 }
 
+<style>
+	#Zone_Widget {
+  width: 100% !important;
+  height: 500px !important;
+}
+</style>
