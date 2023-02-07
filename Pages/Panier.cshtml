@@ -42,7 +42,7 @@
 									<div class="col-4 text-md-right pt-4">
 										<h6>
 											<strong>
-												@item.Price.ToString("c")
+												@item.Price <i class="bi bi-currency-euro"></i>
 												<span class="text-muted">&nbsp;x&nbsp;</span>@item.Count
 											</strong>
 										</h6>
@@ -66,7 +66,7 @@
 								<ul class="list-group unlisted">
 									<li class="list-group-item d-flex justify-content-between bg-light">
 										<span class="text-info"> Valeur du Panier </span>
-										<strong class="text-info">@Model.ShoppingCart.OrderHeader.OrderTotal.ToString("c")</strong>
+										<strong class="text-info">@Model.ShoppingCart.OrderHeader.OrderTotal <i class="bi bi-currency-euro"></i></strong>
 									</li>
 								</ul>
 							</div>
