@@ -51,8 +51,8 @@ namespace ShoppingFantasy.DbInitializer
                     Email = "laimeche160@gmail.com",
                     Name = "Salim Laimeche",
                     PhoneNumber = "0749628470",
-                    Address = "je vit ici et la bas",
-                    PostalCode = "000000",
+                    Address = "Secteur Troyes",
+                    PostalCode = "10350",
                     City = "Los Santos"
                 }, "Admin123*").GetAwaiter().GetResult();
 
