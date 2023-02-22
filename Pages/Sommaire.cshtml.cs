@@ -162,8 +162,8 @@ namespace ShoppingFantasy.Pages
 				LineItems = new List<SessionLineItemOptions>()
 				,
 				Mode = "payment",
-				SuccessUrl = $"https://shoppingfantasy20230205132818.azurewebsites.net/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
-				CancelUrl = $"https://shoppingfantasy20230205132818.azurewebsites.net/Panier",
+				SuccessUrl = $"https://shoppingfantasy20230222125205.azurewebsites.net/OrderConfirmation?id={shoppingCart.OrderHeader.Id}",
+				CancelUrl = $"https://shoppingfantasy20230222125205.azurewebsites.net/Panier",
 				Currency = "eur",
 				CustomerEmail = applicationUser.Email,
 

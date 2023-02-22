@@ -20,7 +20,7 @@ namespace ShoppingFantasy.Utility
             //create mail option
 
             var emailToSend = new MimeMessage();
-            emailToSend.From.Add(MailboxAddress.Parse("virginiecharmetcreation@gmail.com"));
+            emailToSend.From.Add(MailboxAddress.Parse("laimeche160@gmail.com"));
             emailToSend.To.Add(MailboxAddress.Parse(email));
             emailToSend.Subject = subject;
             emailToSend.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = htmlMessage };
@@ -31,7 +31,7 @@ namespace ShoppingFantasy.Utility
             using (var emailClient = new SmtpClient())
             {
                 emailClient.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                emailClient.Authenticate("virginiecharmetcreation@gmail.com", "sgkzguivzxfiipaw");
+                emailClient.Authenticate("laimeche160@gmail.com", "koynpmnwcrdzzonb");
                 emailClient.Send(emailToSend);
                 emailClient.Disconnect(true);
             }

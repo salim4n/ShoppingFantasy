@@ -27,8 +27,8 @@ builder.Services.AddRazorPages();
 
 builder.Services.AddAuthentication().AddFacebook(options =>
 {
-    options.AppId = "1130810997579081";
-    options.AppSecret = "7884f795d0621be45c237cd0713f705";
+    options.AppId = "1420667115129168";
+    options.AppSecret = "34ba5b6abacdd256e7da7f2a6321bd41";
 });
 
 builder.Services.ConfigureApplicationCookie(options =>
