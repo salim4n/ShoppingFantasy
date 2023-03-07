@@ -23,7 +23,6 @@
               </section>
             </div>
             <div class="col-md-6  ">
-                <!-- Placez votre contenu ici -->
                     @if (Model.ShoppingCart.Product.IsInPromo)
                     {
                     <h5 class="price pt-3"><strike class="text-danger">@Model.ShoppingCart.Product.Price <i class="bi bi-currency-euro"></i></strike></h5>
@@ -31,7 +30,7 @@
                     }
                     else
                     {
-                    <h5 class="price pt-3"><strong class="text-success">@Model.ShoppingCart.Product.Price <i class="bi bi-currency-euro"></strong></h5>
+                    <h5 class="price pt-3"><strong class="text-success">@Model.ShoppingCart.Product.Price <i class="bi bi-currency-euro"></i></strong></h5>
                     }
                  <form method="post">
                         <input hidden asp-for="ShoppingCart.ProductId" />
