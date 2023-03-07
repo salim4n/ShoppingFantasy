@@ -9,6 +9,10 @@
       "type": "sqlite.local",
       "connectionId": "ConnectionStrings:liteDb",
       "dynamicId": null
+    },
+    "secrets1": {
+      "type": "secrets.user",
+      "dynamicId": null
     }
   }
 }

@@ -8,6 +8,10 @@
       "type": "sqlite",
       "connectionId": "ConnectionStrings:liteDb",
       "dynamicId": null
+    },
+    "secrets1": {
+      "type": "secrets",
+      "dynamicId": null
     }
   }
 }
