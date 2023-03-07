@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using ShoppingFantasy.Data;
 using ShoppingFantasy.Models;
 using ShoppingFantasy.Utility;
@@ -9,7 +8,6 @@ using ShoppingFantasy.ViewModels;
 using Stripe.Checkout;
 using System.Globalization;
 using System.Security.Claims;
-using static System.Net.WebRequestMethods;
 
 namespace ShoppingFantasy.Pages
 {
@@ -77,7 +75,7 @@ namespace ShoppingFantasy.Pages
 			var relais = Request.Form["relais"];
 			totalPrice = Request.Form["total-price"];
 
-			if (totalPrice.IsNullOrEmpty())
+			if (totalPrice == null || string.IsNullOrEmpty(totalPrice))
 			{
 				TempData["Error"] = "Vous devez chosir un mode de livraison !";
 				return RedirectToPage("Sommaire");
@@ -96,7 +94,7 @@ namespace ShoppingFantasy.Pages
 				OrderHeader = new()
 			};
 
-			if (!relaisId.IsNullOrEmpty())
+			if (!string.IsNullOrEmpty(relaisId))
 			{
 				shoppingCart.OrderHeader.RelaisId = relais;
 			}
